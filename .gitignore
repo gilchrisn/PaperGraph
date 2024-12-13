@@ -1,0 +1,15 @@
+train.json
+test.json
+
+__pycache__/
+*.pyc
+papers/
+*.pdf
+separated_files/
+references/
+progress_checkpoint.txt
+reference_list_checkpoint.txt
+extracted_data.txt
+papers.txt
+statistics.txt
+paper_titles/
