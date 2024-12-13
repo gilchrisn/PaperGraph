@@ -12,3 +12,13 @@ check localhost:8070 if grobid is running
 
 
 pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
+
+average time to download paper 15.75 seconds
+Average Extraction Time per Paper: 8.01 seconds
+Keyword Counts in Filtered Sections:
+  evaluation: 19
+  methodology: 7
+  related work: 40
+  conclusion: 59
+  baseline: 0
+Papers with at least one keyword match: 64 out of 87

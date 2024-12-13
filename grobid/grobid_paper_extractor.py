@@ -122,7 +122,7 @@ def format_extracted_data(title, abstract, references, sections):
 
 # Example usage
 if __name__ == "__main__":
-    pdf_path = "downloaded_papers/A Distributed Graph Engine for Web Scale RDF Data.pdf"  # Replace with your PDF file path
+    pdf_path = "resources/papers/A Compiler for Throughput Optimization of Graph Algorithms on GPUs.pdf"
 
     if not os.path.exists(pdf_path):
         print(f"PDF file not found at: {pdf_path}")

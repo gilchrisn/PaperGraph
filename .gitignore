@@ -13,3 +13,6 @@ extracted_data.txt
 papers.txt
 statistics.txt
 paper_titles/
+resources/
+venv/
+__init__.py
