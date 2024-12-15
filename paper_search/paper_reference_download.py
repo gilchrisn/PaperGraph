@@ -7,9 +7,13 @@ from grobid.grobid_paper_extractor import extract_tei_from_pdf, extract_filtered
 from paper_search.get_research_paper import search_and_download_google_paper
 import signal
 import traceback
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 # Define the GROBID server URL
-GROBID_BASE_URL = "http://localhost:8070/api"
+GROBID_BASE_URL = os.getenv("GROBID_BASE_URL")
 
 # Keywords for filtering section titles
 HEAD_KEYWORDS = ["evaluation", "methodology", "related work", "conclusion", "baseline"]

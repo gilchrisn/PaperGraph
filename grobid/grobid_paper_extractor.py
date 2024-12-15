@@ -2,9 +2,13 @@ import requests
 from bs4 import BeautifulSoup
 import grobid_tei_xml
 import os
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 # Define the GROBID server URL
-GROBID_BASE_URL = "http://localhost:8070/api"
+GROBID_BASE_URL = os.getenv("GROBID_BASE_URL")
 
 # Keywords for filtering section titles
 HEAD_KEYWORDS = [
@@ -86,7 +90,10 @@ def extract_metadata(pdf_path, metadata_type):
             doc = grobid_tei_xml.parse_document_xml(response.text)
             return {
                 "title": doc.header.title if doc.header.title else "Title not found.",
-                "abstract": doc.abstract if doc.abstract else "Abstract not found."
+                "abstract": doc.abstract if doc.abstract else "Abstract not found.",
+                "authors": doc.header.authors if doc.header.authors else [],
+                "doi": doc.header.doi if doc.header.doi else "DOI not found.",
+                "citations": doc.citations if doc.citations else []
             }
         elif metadata_type == "processReferences":
             citations = grobid_tei_xml.parse_citation_list_xml(response.text)

@@ -1,5 +1,6 @@
 train.json
 test.json
+.env
 
 __pycache__/
 *.pyc
@@ -16,3 +17,5 @@ paper_titles/
 resources/
 venv/
 __init__.py
+references/
+separated_files/
