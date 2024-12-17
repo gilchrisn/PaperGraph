@@ -1,4 +1,5 @@
 import os
+import re
 import json
 import uuid
 import argparse
@@ -19,6 +20,20 @@ DB_USER = os.getenv("DB_USER", "postgres")
 DB_PASSWORD = os.getenv("DB_PASSWORD", "your_password_here")
 
 
+def sanitize_filename(title):
+    """
+    Sanitize the title to create a safe filename.
+
+    :param title: Original title of the paper
+    :return: Sanitized filename
+    """
+    if not title:
+        return "untitled_paper"
+    sanitized = re.sub(r'[^\w\s-]', '', title)  # Remove non-alphanumeric characters
+    sanitized = re.sub(r'\s+', '_', sanitized.strip())  # Replace spaces with underscores
+    return sanitized or "untitled_paper"
+
+
 def generate_deterministic_uuid(title, authors):
     """
     Generate a deterministic UUID based on title and authors.
@@ -27,7 +42,6 @@ def generate_deterministic_uuid(title, authors):
     :param authors: List of author names (list of strings)
     :return: Deterministic UUID as a string
     """
-    # Concatenate the title and sorted author list for consistency
     source = f"{title}|{','.join(authors)}"
     hash_value = hashlib.sha256(source.encode()).hexdigest()
     return str(uuid.UUID(hash_value[:32]))
@@ -47,7 +61,7 @@ def init_db_connection():
         )
         print("Connected to PostgreSQL database.")
         return conn
-    except Exception as e:
+    except psycopg2.Error as e:
         print(f"Error connecting to the database: {e}")
         exit(1)
 
@@ -57,12 +71,36 @@ def process_file(file_path, conn):
     Process a single PDF file, extract metadata, and insert it into PostgreSQL.
     """
     try:
+        if not os.path.exists(file_path):
+            print(f"File {file_path} not found. Skipping.")
+            return
+
         # Extract metadata using Grobid
         paper_metadata = extract_metadata(file_path, "processHeaderDocument")
         if not paper_metadata:
-            print(f"Warning: Metadata extraction failed for {file_path}")
+            print(f"Metadata extraction failed for {file_path}. Reason: No metadata found. Moving to 'ocr_needed' directory.")
+
+            # Move the file to the "ocr_needed" directory
+            failed_dir = os.path.join(os.path.dirname(file_path), "ocr_needed")
+            os.makedirs(failed_dir, exist_ok=True)
+            os.rename(file_path, os.path.join(failed_dir, os.path.basename(file_path)))
             return
-        
+        elif paper_metadata.get("title") == "Title not found." or paper_metadata.get("abstract") == "Abstract not found.":
+            print(f"Metadata extraction failed for {file_path}. Reason: Missing title or abstract. Moving to 'invalid' directory.")
+            
+            # Move the file to the "invalid" directory
+            failed_dir = os.path.join(os.path.dirname(file_path), "invalid")
+            os.makedirs(failed_dir, exist_ok=True)
+            os.rename(file_path, os.path.join(failed_dir, os.path.basename(file_path)))
+            return
+
+        # Rename the file to the sanitized title
+        sanitized_title = sanitize_filename(paper_metadata["title"])
+        new_file_path = os.path.join(os.path.dirname(file_path), f"{sanitized_title}.pdf")
+        if file_path != new_file_path:
+            os.rename(file_path, new_file_path)
+        file_path = new_file_path
+
         # Generate deterministic UUID
         authors = [author.full_name.strip() for author in paper_metadata.get("authors", [])]
         paper_id = generate_deterministic_uuid(paper_metadata["title"], authors)
@@ -72,7 +110,7 @@ def process_file(file_path, conn):
             paper_id,
             paper_metadata["title"].strip(),
             paper_metadata["abstract"].strip(),
-            None if paper_metadata["doi"] == "DOI not found." else paper_metadata["doi"].strip(),
+            None if paper_metadata.get("doi") == "DOI not found." else paper_metadata["doi"].strip(),
             json.dumps(authors),
             json.dumps(paper_metadata.get("citations", [])),
             file_path,
@@ -91,7 +129,7 @@ def process_file(file_path, conn):
             print(f"Successfully inserted: {paper_metadata['title']}")
 
     except Exception as e:
-        print(f"Error processing file {file_path}: {e}")
+        print(f"Error processing file {file_path}: {e}. Rolling back transaction.")
         conn.rollback()
 
 
@@ -103,7 +141,7 @@ def process_directory(directory, conn):
         print(f"Error: {directory} is not a valid directory.")
         return
 
-    pdf_files = [f for f in os.listdir(directory) if f.endswith(".pdf")]
+    pdf_files = [f for f in os.listdir(directory) if f.lower().endswith(".pdf")]
     if not pdf_files:
         print("No PDF files found in the directory.")
         return

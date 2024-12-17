@@ -10,9 +10,12 @@ docker run --rm --init --ulimit core=0 -p 8070:8070 grobid/grobid:0.8.1
 
 check localhost:8070 if grobid is running
 
-postgresql
-docker run --name postgres -e POSTGRES_PASSWORD=mysecretpassword -p 5432:5432 -d postgres
 
+install postgresql
+install nodejs
+
+npm version: 10.9.0
+node version: 22.12.0
 
 pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
 
