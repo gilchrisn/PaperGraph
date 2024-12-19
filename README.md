@@ -28,3 +28,6 @@ Keyword Counts in Filtered Sections:
   conclusion: 59
   baseline: 0
 Papers with at least one keyword match: 64 out of 87
+
+to start backend: uvicorn main:app --reload
+to start frontend: npm start
