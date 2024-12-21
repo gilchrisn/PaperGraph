@@ -1,6 +1,7 @@
 train.json
 test.json
 .env
+models/
 node_modules/
 __pycache__/
 *.pyc
