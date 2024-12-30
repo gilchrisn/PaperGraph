@@ -1,0 +1,35 @@
+-- Table to store details about research papers
+CREATE TABLE papers (
+    id UUID PRIMARY KEY,                       -- Unique identifier for each paper
+    title TEXT NOT NULL,                       -- Title of the paper
+    doi TEXT,                                  -- Digital Object Identifier for the paper
+    authors JSONB,                             -- List of authors in JSON format (e.g., [{"name": "John Doe"}])
+    filepath TEXT NOT NULL,                    -- Filepath for the original paper (PDF, XML, etc.)
+    embedding JSONB DEFAULT NULL               -- Optional: Vector embedding for the paper (e.g., for NLP/ML analysis)
+);
+
+-- Table to represent relationships between papers
+CREATE TABLE reference (
+    id SERIAL PRIMARY KEY,                     -- Unique identifier for each reference relationship
+    source_paper_id UUID NOT NULL REFERENCES papers(id), -- The citing paper
+    cited_paper_id UUID NOT NULL REFERENCES papers(id),  -- The cited or baseline paper
+    relationship_type TEXT CHECK (relationship_type IN ('baseline', 'citation')), 
+                                                -- Type of relationship: 'baseline' or 'citation'
+    remarks TEXT,                               -- Optional: Remarks explaining the relationship
+    similarity_score FLOAT CHECK (similarity_score >= 0 AND similarity_score <= 1), 
+                                                -- Similarity score between 0 (least similar) and 1 (most similar)
+    CONSTRAINT unique_source_cited_pair UNIQUE (source_paper_id, cited_paper_id) 
+                                                -- Ensure each source-cited pair is unique
+);
+
+
+-- Table to store claims made in research papers
+CREATE TABLE claims (
+    id SERIAL PRIMARY KEY,                     -- Unique identifier for each claim
+    paper_id UUID NOT NULL REFERENCES papers(id), -- Paper that proposed the claim
+    claim_text TEXT NOT NULL,                  -- The claim text proposed by the author
+    validity BOOLEAN DEFAULT NULL              -- Whether the claim is valid (TRUE: yes, FALSE: no, NULL: unknown/not assessed)
+);
+
+CREATE EXTENSION IF NOT EXISTS pg_trgm;
+CREATE INDEX papers_title_trgm_idx ON papers USING gin (title gin_trgm_ops);
