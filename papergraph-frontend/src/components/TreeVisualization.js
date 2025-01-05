@@ -1,18 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
 import * as d3 from "d3";
-import Tooltip from "./Tooltip";
 
-
-const TreeVisualization = ({ data }) => {
+const TreeVisualization = ({ data, onNodeClick }) => {
     const svgRef = useRef();
     const gRef = useRef();
 
-    const [tooltip, setTooltip] = useState({
-        visible: false,
-        x: 0,
-        y: 0,
-        node: null,
-    });
+    const [existingNodeIds, setExistingNodeIds] = useState(new Set());
+    const [existingLinkIds, setExistingLinkIds] = useState(new Set());
 
     useEffect(() => {
         const width = 1500;
@@ -36,95 +30,135 @@ const TreeVisualization = ({ data }) => {
         g.selectAll("*").remove();
 
         // Define tree layout
-        const treeLayout = d3.tree().size([height * 10, width * 2]);
+        const treeLayout = d3.tree().size([height * 5, width * 2]);
         const root = d3.hierarchy(data);
         treeLayout(root);
 
-        // Links
+        const nodes = root.descendants();
         const links = root.links();
 
-    
-        g.selectAll(".link")
-            .data(links, (d) => `${d.source.data.id}-${d.target.data.id}`)
+        // Identify new nodes and links
+        const currentNodeIds = new Set(nodes.map((node) => node.data.id));
+        const newNodes = nodes.filter((node) => !existingNodeIds.has(node.data.id));
+
+        const currentLinkIds = new Set(
+            links.map((link) => `${link.source.data.id}-${link.target.data.id}`)
+        );
+        const newLinks = links.filter(
+            (link) =>
+                !existingLinkIds.has(`${link.source.data.id}-${link.target.data.id}`)
+        );
+
+        // Draw existing links without animation
+        g.selectAll(".link-existing")
+            .data(links.filter((link) => !newLinks.includes(link)), (d) =>
+                `${d.source.data.id}-${d.target.data.id}`
+            )
             .join(
                 (enter) =>
                     enter
                         .append("line")
-                        .attr("class", "link")
+                        .attr("class", "link-existing")
                         .attr("stroke", "#999")
                         .attr("stroke-width", 5)
                         .attr("x1", (d) => d.source.x)
                         .attr("y1", (d) => d.source.y)
-                        .attr("x2", (d) => d.source.x)
-                        .attr("y2", (d) => d.source.y)
-                        .transition()
-                        .duration(500)
                         .attr("x2", (d) => d.target.x)
                         .attr("y2", (d) => d.target.y)
             );
 
-        // Nodes
-        const nodes = root.descendants();
+        // Stagger new links animation
+        newLinks.forEach((link, index) => {
+            d3.timeout(() => {
+                g.append("line")
+                    .attr("class", "link-new")
+                    .attr("stroke", "#999")
+                    .attr("stroke-width", 5)
+                    .attr("x1", link.source.x)
+                    .attr("y1", link.source.y)
+                    .attr("x2", link.source.x)
+                    .attr("y2", link.source.y)
+                    .transition()
+                    .duration(500)
+                    .attr("x2", link.target.x)
+                    .attr("y2", link.target.y);
+            }, index * 100); // Delay animation based on index
+        });
 
-        // Print all x and y values of nodes
-        
-        g.selectAll(".node")
-            .data(nodes, (d) => d.data.id)
+
+        // Draw existing nodes without animation
+        g.selectAll(".node-existing")
+            .data(nodes.filter((node) => !newNodes.includes(node)), (d) => d.data.id)
             .join(
                 (enter) =>
                     enter
                         .append("circle")
-                        .attr("class", "node")
-                        .attr("r", 0)
+                        .attr("class", "node-existing")
                         .attr("fill", (d) => {
-                            // Define a color scale
                             const colorScale = d3.scaleLinear()
-                                .domain([0, 0.33, 0.66, 1]) // Dynamic domain based on length of range
-                                .range(["red", "orange", "yellow", "green"]); // Output range: colors
-        
-                            return colorScale(d.data.similarity_score || 0); // Apply color based on similarity score
+                                .domain([0, 0.33, 0.66, 1])
+                                .range(["red", "orange", "yellow", "green"]);
+                            return colorScale(d.data.similarity_score || 0);
                         })
-                        .attr("cx", (d) => (d.parent ? d.parent.x : d.x))
-                        .attr("cy", (d) => (d.parent ? d.parent.y : d.y))
-                        .on("click", (event, d) => {
-                            setTooltip({
-                                visible: true,
-                                x: event.pageX, // Use event.pageX/Y for positioning
-                                y: event.pageY,
-                                node: d.data,
-                            })
-                        })
-                        // .on("click", (event, d) => {
-                        //     console.log(`Node clicked: ${d.data.id}`);
-                        //     const url = `/paper/${d.data.id}`; // Construct the URL
-                        //     window.open(url, "_blank"); // Open the URL in a new tab
-                        // })
-                        .transition()
-                        .duration(500)
-                        .attr("r", 100) // Increase node size
-                        .attr("cx", (d) => d.x) // Update node position
+                        .attr("r", 50)
+                        .attr("cx", (d) => d.x)
                         .attr("cy", (d) => d.y)
-                        
+                        .on("click", (event, d) => onNodeClick && onNodeClick(d.data))
             );
 
-        // Labels
-        g.selectAll(".label")
-            .data(nodes, (d) => d.data.id)
+        // Stagger new nodes animation
+        newNodes.forEach((node, index) => {
+            d3.timeout(() => {
+                g.append("circle")
+                    .attr("class", "node-new")
+                    .attr("r", 0)
+                    .attr("fill", () => {
+                        const colorScale = d3.scaleLinear()
+                            .domain([0, 0.33, 0.66, 1])
+                            .range(["red", "orange", "yellow", "green"]);
+                        return colorScale(node.data.similarity_score || 0);
+                    })
+                    .attr("cx", node.parent ? node.parent.x : node.x)
+                    .attr("cy", node.parent ? node.parent.y : node.y)
+                    .on("click", (event) => onNodeClick && onNodeClick(node.data))
+                    .transition()
+                    .duration(500)
+                    .attr("r", 50)
+                    .attr("cx", node.x)
+                    .attr("cy", node.y);
+
+                // Append label after node
+                g.append("text")
+                    .attr("class", "label")
+                    .attr("text-anchor", "middle")
+                    .style("font-size", "14px")
+                    .attr("x", node.x)
+                    .attr("y", node.y - 10)
+                    .text(node.data.label);
+            }, index * 100); // Delay animation based on index
+        });
+
+
+
+        // Draw labels
+        g.selectAll(".label-existing")
+            .data(nodes.filter((node) => !newNodes.includes(node)), (d) => d.data.id)
             .join(
                 (enter) =>
                     enter
                         .append("text")
-                        .attr("class", "label")
+                        .attr("class", "label-existing")
                         .attr("text-anchor", "middle")
-                        .style("font-size", "14px") // Slightly larger font
-                        .attr("x", (d) => (d.parent ? d.parent.x : d.x))
-                        .attr("y", (d) => (d.parent ? d.parent.y : d.y)) // Offset labels
-                        .text((d) => d.data.label)
-                        .transition()
-                        .duration(500)
+                        .style("font-size", "14px")
                         .attr("x", (d) => d.x)
-                        .attr("y", (d) => d.y)
+                        .attr("y", (d) => d.y - 10)
+                        .text((d) => d.data.label)
             );
+
+
+        // Update the sets of existing node and link IDs
+        setExistingNodeIds(new Set([...existingNodeIds, ...currentNodeIds]));
+        setExistingLinkIds(new Set([...existingLinkIds, ...currentLinkIds]));
     }, [data]);
 
     return (
@@ -132,15 +166,6 @@ const TreeVisualization = ({ data }) => {
             <svg ref={svgRef}>
                 <g ref={gRef}></g>
             </svg>
-
-            {tooltip.visible && (
-                <Tooltip
-                    x={tooltip.x}
-                    y={tooltip.y}
-                    node={tooltip.node}
-                    onClose={() => setTooltip({ visible: false })}
-                />
-            )}
         </div>
     );
 };
