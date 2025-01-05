@@ -46,7 +46,7 @@ def get_similarity(paper_1_path, paper_2_path):
 
 if __name__ == '__main__':
     paper_1_path = "resources\\all_papers\\-Stepping_A_Parallel_Single_Source_Shortest_Path_Algorithm.pdf"
-    paper_2_path = "resources\\all_papers\\0_1_2_3_4_53_46_87_9_2_A_4_1_CB_D_E2_A_F_2_G7_IH_5_E7_C7_9_QP_R_7_S_E7_3_4_4_T_U3_4_V_2_9_3_W_X_Y_8a_cb_ed_f_0g_Gh_i_p3_4_3_Wq_W_Fh_P_r7_s_4_t_vu_w_4x_y_S_F_9_3_G3_W_3_46_b_E7_9_1.pdf"
+    paper_2_path = "resources\\all_papers\\3-HOP_A_High-Compression_Indexing_Scheme_for_Reachability_Query.pdf"
 
     similarity_score, relationship_type, remarks = get_similarity(paper_1_path, paper_2_path)
     print(f"Similarity Score: {similarity_score:.2f}")

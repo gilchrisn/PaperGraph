@@ -32,8 +32,3 @@ export const searchPaperById = async (id) => {
 export const searchPaperByTitle = async (title) => {
     return apiRequest("GET", "/papers/search/", { title });
 };
-
-// Explore references for a given paper ID
-export const exploreReferences = async (paperId) => {
-    return apiRequest("GET", `/papers/${paperId}/explore/`);
-};
