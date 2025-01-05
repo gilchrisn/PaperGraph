@@ -20,13 +20,13 @@ const Explore = () => {
     const [nodes, setNodes] = useState([]); // For storing all nodes
     const [similarNodes, setSimilarNodes] = useState([]); // For storing similar nodes
 
-    const handleUpdateThreshold = () => {
-        const filteredNodes = Object.values(nodes).filter(
+    // Recalculate similarNodes when nodes or inputThreshold changes
+    useEffect(() => {
+        const filteredNodes = nodes.filter(
             (node) => node.similarity_score >= inputThreshold
         );
-        
         setSimilarNodes(filteredNodes);
-    };
+    }, [nodes, inputThreshold]);
 
     useEffect(() => {
         // Merge new nodes and links into the tree structure
@@ -40,6 +40,8 @@ const Explore = () => {
                 }
             };
             flattenTree(tree);
+
+            // Update existing nodes
             setNodes(Object.values(nodeMap));
 
             // Add new nodes
@@ -66,7 +68,6 @@ const Explore = () => {
         // Handle incoming WebSocket data
         const handleMessage = (data) => {
             setTreeData((prevTree) => mergeIntoTree(prevTree, data.nodes, data.links));
-            handleUpdateThreshold();
         };
 
         // Establish WebSocket connection
@@ -77,8 +78,6 @@ const Explore = () => {
             socket.close();
         };
     }, [id]);
-
-    
 
     return (
         <div style={{ display: "flex", height: "100vh" }}>
@@ -101,7 +100,6 @@ const Explore = () => {
                         value={inputThreshold}
                         onChange={(e) => setInputThreshold(e.target.value)}
                     />
-                    <button onClick={handleUpdateThreshold}>Update Threshold</button>
                     <h2>Similar Papers</h2>
                     {similarNodes.length > 0 ? (
                         <ul>
