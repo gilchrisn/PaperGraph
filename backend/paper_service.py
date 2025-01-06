@@ -128,48 +128,6 @@ def process_references(cursor, root_paper_id: str, cited_paper_id: str, explored
 
     return reference_ids
 
-# def get_related_papers(root_paper_id: str, cited_paper_id: str, explored_papers: set = None, max_depth: int = 5, current_depth: int = 0):
-#         """
-#         Retrieve related papers using exploration (references traversal) and update relationships incrementally.
-
-#         :param root_paper_id: ID of the root paper
-#         :param cited_paper_id: ID of the starting paper for this exploration
-#         :param explored_papers: Set of already explored paper IDs
-#         :param max_depth: Maximum depth to traverse
-#         :param current_depth: Current depth of traversal
-#         :return: Status and list of explored papers
-#         """
-#         if explored_papers is None:
-#             explored_papers = set()
-
-#         if current_depth > max_depth:
-#             return {"status": "Max exploration depth reached", "explored_papers": list(explored_papers)}
-
-#         try:
-#             with init_db_connection() as conn:
-#                 conn.autocommit = False
-
-#                 with conn.cursor() as cursor:
-#                     explored_papers.add(cited_paper_id)
-#                     reference_ids = process_references(cursor, root_paper_id, cited_paper_id, explored_papers)
-
-#                     for ref_id, similarity_score in reference_ids.items():
-#                         if ref_id not in explored_papers:
-#                             print(f"Exploring reference {ref_id} with similarity score {similarity_score}")
-                
-
-#                     conn.commit()
-
-#                     for ref_id in reference_ids.keys():
-#                         if ref_id not in explored_papers:
-#                             get_related_papers(root_paper_id, ref_id, explored_papers, max_depth, current_depth + 1)
-
-#             return {"status": "Exploration completed", "explored_papers": list(explored_papers)}
-
-#         except Exception as e:
-#             print(f"An error occurred during exploration: {e}")
-#             raise HTTPException(status_code=500, detail=str(e))
-
 async def get_related_papers(
     websocket: WebSocket,
     root_paper_id: str,

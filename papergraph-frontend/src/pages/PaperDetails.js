@@ -26,7 +26,11 @@ const PaperDetails = () => {
         <div>
             <h1>{paper.title}</h1>
             <p><strong>Authors:</strong> {paper.authors.join(", ")}</p>
-            <a href={paper.filepath} target="_blank" rel="noopener noreferrer">
+            <a
+                href={`http://localhost:8000/papers/${encodeURIComponent(paper.id)}/pdf`}
+                target="_blank"
+                rel="noopener noreferrer"
+            >
                 <button>Open PDF</button>
             </a>
             <button onClick={handleExplore}>Explore References</button>
