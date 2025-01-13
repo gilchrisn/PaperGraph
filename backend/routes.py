@@ -1,16 +1,12 @@
-from fastapi import APIRouter, HTTPException, Query
-from database import init_db_connection
-from fastapi import FastAPI
-from fastapi.websockets import WebSocket
-from paper_service import get_related_papers
+from fastapi import APIRouter, HTTPException, Query, WebSocket
 from fastapi.responses import FileResponse
+from paper_service import PaperService
 import os
 
-app = FastAPI()
 router = APIRouter()
 
-# Include the router in the FastAPI app
-app.include_router(router)
+# Initialize the service instance
+paper_service = PaperService()
 
 # 1. Get All Papers
 @router.get("/papers/", tags=["Papers"])
@@ -19,16 +15,12 @@ def get_all_papers():
     Retrieve all papers from the database.
     """
     try:
-        with init_db_connection() as conn:
-            with conn.cursor() as cursor:
-                cursor.execute("SELECT * FROM papers;")
-                papers = cursor.fetchall()
+        papers = paper_service.get_all_papers()
         if not papers:
             raise HTTPException(status_code=404, detail="No papers found")
         return {"papers": papers}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-
 
 
 # 2. Get Paper by Title
@@ -38,10 +30,7 @@ def search_paper_by_title(title: str = Query(..., description="Paper title to se
     Retrieve papers by title.
     """
     try:
-        with init_db_connection() as conn:
-            with conn.cursor() as cursor:
-                cursor.execute("SELECT * FROM papers WHERE title ILIKE %s;", (f"%{title}%",))
-                papers = cursor.fetchall()
+        papers = paper_service.search_paper_by_title(title)
         if not papers:
             raise HTTPException(status_code=404, detail="Paper not found")
         return {"papers": papers}
@@ -56,10 +45,7 @@ def get_paper_by_id(paper_id: str):
     Retrieve a specific paper by its ID.
     """
     try:
-        with init_db_connection() as conn:
-            with conn.cursor() as cursor:
-                cursor.execute("SELECT * FROM papers WHERE id = %s;", (paper_id,))
-                paper = cursor.fetchone()
+        paper = paper_service.get_paper_by_id(paper_id)
         if not paper:
             raise HTTPException(status_code=404, detail=f"Paper with ID '{paper_id}' not found")
         return {"paper": paper}
@@ -67,19 +53,28 @@ def get_paper_by_id(paper_id: str):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-
 # 4. Exploration Method
 @router.websocket("/papers/{paper_id}/explore/")
-async def explore_paper(websocket: WebSocket, paper_id: str):
+async def explore_paper(
+    websocket: WebSocket,
+    paper_id: str,
+    max_depth: int = Query(5),  
+    similarity_threshold: float = Query(0.88),
+    traversal_type: str = Query("bfs")
+):
     await websocket.accept()
     try:
-        # Start the exploration process with WebSocket updates
-        await get_related_papers(websocket, paper_id, paper_id)
+        await paper_service.explore_paper(
+            websocket, 
+            root_paper_id=paper_id, 
+            cited_paper_id=paper_id,
+            max_depth=max_depth, 
+            similarity_threshold=similarity_threshold,
+            traversal_type=traversal_type,
+        )
     except Exception as e:
-        # Handle errors gracefully
         await websocket.send_json({"status": "error", "message": str(e)})
     finally:
-        # Close the WebSocket connection
         await websocket.close()
 
 
@@ -91,26 +86,17 @@ def search_similar_papers(paper_id: str):
     """
     return {"message": "This feature is under development.", "paper_id": paper_id}
 
+
 # 6. Get Paper PDF
 @router.get("/papers/{paper_id}/pdf/", tags=["Papers"])
 def fetch_pdf(paper_id: str):
     """
     Retrieve the PDF file for a specific paper.
     """
-
     try:
-        with init_db_connection() as conn:
-            with conn.cursor() as cursor:
-                cursor.execute("SELECT filepath FROM papers WHERE id = %s;", (paper_id,))
-                pdf_path = cursor.fetchone()["filepath"]
-        if not pdf_path:
-            raise HTTPException(status_code=404, detail=f"PDF for paper with ID '{paper_id}' not found")
-        
-        file_path = os.path.join(os.getcwd(), pdf_path)
-
+        file_path = paper_service.get_pdf_path(paper_id)
         if not os.path.exists(file_path):
-            raise HTTPException(status_code=404, detail=f"PDF file not found")
-        
+            raise HTTPException(status_code=404, detail="PDF file not found")
         return FileResponse(
             file_path,
             media_type="application/pdf",

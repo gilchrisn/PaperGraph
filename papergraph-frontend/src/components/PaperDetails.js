@@ -3,7 +3,7 @@ import React from "react";
 const PaperDetails = ({ paper }) => {
     return (
         <div>
-            <h3>{paper.label}</h3>
+            <h3>{paper.title}</h3>
             <p>
                 <strong>ID:</strong> {paper.id}
             </p>

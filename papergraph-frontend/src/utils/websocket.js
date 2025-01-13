@@ -1,5 +1,8 @@
-export const createWebSocket = (paperId, onMessage) => {
-  const socket = new WebSocket(`ws://127.0.0.1:8000/papers/${paperId}/explore/`);
+export const createWebSocket = (paperId, onMessage, maxDepth = 5, similarityThreshold = 0.88, traversalType = "bfs") => {
+
+    const socket = new WebSocket(
+        `ws://127.0.0.1:8000/papers/${paperId}/explore/?max_depth=${maxDepth}&similarity_threshold=${similarityThreshold}&traversal_type=${traversalType}`
+    );
 
   socket.onopen = () => {
       console.log("WebSocket connected.");

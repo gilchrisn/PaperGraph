@@ -30,7 +30,7 @@ const TreeVisualization = ({ data, onNodeClick }) => {
         g.selectAll("*").remove();
 
         // Define tree layout
-        const treeLayout = d3.tree().size([height * 5, width * 2]);
+        const treeLayout = d3.tree().size([height * 5, width]);
         const root = d3.hierarchy(data);
         treeLayout(root);
 
