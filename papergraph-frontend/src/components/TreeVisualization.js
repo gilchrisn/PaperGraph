@@ -1,173 +1,170 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import * as d3 from "d3";
 
-const TreeVisualization = ({ data, onNodeClick }) => {
-    const svgRef = useRef();
-    const gRef = useRef();
+/**
+ * Build a tree structure from the given { nodes, links } graph.
+ * The data is already given in BFS/DFS order from the server, so we just:
+ * 1) Create a map of nodeId -> node
+ * 2) For each link, attach the child to the parent's children[] if not already visited
+ * 3) Return the node corresponding to `rootId`
+ *
+ * This way, we ensure a node is only "attached" once, preventing duplicates.
+ */
+function buildHierarchyNoDuplicates(nodes, links, rootId) {
+  // 1) Create a map of nodes => { ...node, children: [] }
+  const nodeMap = new Map(
+    nodes.map((n) => [n.id, { ...n, children: [] }])
+  );
 
-    const [existingNodeIds, setExistingNodeIds] = useState(new Set());
-    const [existingLinkIds, setExistingLinkIds] = useState(new Set());
+  // 2) Keep track of child IDs we've already attached to a parent
+  const attachedChildren = new Set();
 
-    useEffect(() => {
-        const width = 1500;
-        const height = 800;
+  // 3) Attach children based on links
+  //    The server traversal ensures a node likely appears in correct BFS/DFS order.
+  links.forEach((link) => {
+    const parent = nodeMap.get(link.source);
+    const child = nodeMap.get(link.target);
 
-        // Select the SVG container
-        const svg = d3
-            .select(svgRef.current)
-            .attr("width", width)
-            .attr("height", height)
-            .style("border", "1px solid black")
-            .call(
-                d3.zoom().on("zoom", (event) => {
-                    d3.select(gRef.current).attr("transform", event.transform);
-                })
-            );
+    // If both parent & child exist AND we haven't attached the child yet
+    if (parent && child && !attachedChildren.has(child.id)) {
+      parent.children.push(child);
+      attachedChildren.add(child.id);
+    }
+  });
 
-        const g = d3.select(gRef.current);
+  // 4) Return the "root" node object, or null if missing
+  return nodeMap.get(rootId) || null;
+}
 
-        // **Clear all existing content in the <g> group**
-        g.selectAll("*").remove();
+const TreeVisualization = ({ graph, rootId, onNodeClick }) => {
+  const svgRef = useRef(null);
+  const gRef = useRef(null);
 
-        // Define tree layout
-        const treeLayout = d3.tree().size([height * 5, width]);
-        const root = d3.hierarchy(data);
-        treeLayout(root);
+  useEffect(() => {
+    // Guard: if no nodes or if we can't find the root node
+    if (!graph.nodes.length) return;
 
-        const nodes = root.descendants();
-        const links = root.links();
+    // Build a hierarchy from the already-traversed data
+    const rootData = buildHierarchyNoDuplicates(graph.nodes, graph.links, rootId);
+    if (!rootData) {
+      console.warn(`Could not build hierarchy: no root found for id=${rootId}`);
+      return;
+    }
 
-        // Identify new nodes and links
-        const currentNodeIds = new Set(nodes.map((node) => node.data.id));
-        const newNodes = nodes.filter((node) => !existingNodeIds.has(node.data.id));
+    // Convert our "plain object" tree into a D3 hierarchy, then run d3.tree()
+    const root = d3.hierarchy(rootData);
+    d3.tree().size([1500, 800])(root);
 
-        const currentLinkIds = new Set(
-            links.map((link) => `${link.source.data.id}-${link.target.data.id}`)
-        );
-        const newLinks = links.filter(
-            (link) =>
-                !existingLinkIds.has(`${link.source.data.id}-${link.target.data.id}`)
-        );
+    // We'll need a quick lookup from node ID => { x, y } for drawing links
+    const allNodes = root.descendants();
+    const nodeById = {};
+    allNodes.forEach((d) => {
+      nodeById[d.data.id] = d;
+    });
 
-        // Draw existing links without animation
-        g.selectAll(".link-existing")
-            .data(links.filter((link) => !newLinks.includes(link)), (d) =>
-                `${d.source.data.id}-${d.target.data.id}`
-            )
-            .join(
-                (enter) =>
-                    enter
-                        .append("line")
-                        .attr("class", "link-existing")
-                        .attr("stroke", "#999")
-                        .attr("stroke-width", 5)
-                        .attr("x1", (d) => d.source.x)
-                        .attr("y1", (d) => d.source.y)
-                        .attr("x2", (d) => d.target.x)
-                        .attr("y2", (d) => d.target.y)
-            );
+    // Prepare the <svg> with zoom
+    const svg = d3
+      .select(svgRef.current)
+      .attr("width", 1500)
+      .attr("height", 800)
+      .style("border", "1px solid black")
+      .call(
+        d3.zoom().on("zoom", (event) => {
+          d3.select(gRef.current).attr("transform", event.transform);
+        })
+      );
 
-        // Stagger new links animation
-        newLinks.forEach((link, index) => {
-            d3.timeout(() => {
-                g.append("line")
-                    .attr("class", "link-new")
-                    .attr("stroke", "#999")
-                    .attr("stroke-width", 5)
-                    .attr("x1", link.source.x)
-                    .attr("y1", link.source.y)
-                    .attr("x2", link.source.x)
-                    .attr("y2", link.source.y)
-                    .transition()
-                    .duration(500)
-                    .attr("x2", link.target.x)
-                    .attr("y2", link.target.y);
-            }, index * 100); // Delay animation based on index
-        });
+    const g = d3.select(gRef.current);
 
+    // ========== Draw Links ==========
+    g.selectAll(".link")
+      // Bind all incoming links (regardless of BFS/DFS) 
+      // but only render if their source/target is in the hierarchy
+      .data(graph.links, (d) => `${d.source}-${d.target}`)
+      .join(
+        (enter) =>
+          enter
+            .append("line")
+            .attr("class", "link")
+            .attr("stroke", "#999")
+            .attr("stroke-width", 2)
+            // Start both ends at the source's position (for a "grow" effect)
+            .attr("x1", (d) => nodeById[d.source]?.x ?? 0)
+            .attr("y1", (d) => nodeById[d.source]?.y ?? 0)
+            .attr("x2", (d) => nodeById[d.source]?.x ?? 0)
+            .attr("y2", (d) => nodeById[d.source]?.y ?? 0)
+            .transition()
+            .duration(500)
+            .attr("x2", (d) => nodeById[d.target]?.x ?? 0)
+            .attr("y2", (d) => nodeById[d.target]?.y ?? 0),
+        (update) =>
+          update
+            .attr("x1", (d) => nodeById[d.source]?.x ?? 0)
+            .attr("y1", (d) => nodeById[d.source]?.y ?? 0)
+            .attr("x2", (d) => nodeById[d.target]?.x ?? 0)
+            .attr("y2", (d) => nodeById[d.target]?.y ?? 0),
+        (exit) => exit.remove()
+      );
 
-        // Draw existing nodes without animation
-        g.selectAll(".node-existing")
-            .data(nodes.filter((node) => !newNodes.includes(node)), (d) => d.data.id)
-            .join(
-                (enter) =>
-                    enter
-                        .append("circle")
-                        .attr("class", "node-existing")
-                        .attr("fill", (d) => {
-                            const colorScale = d3.scaleLinear()
-                                .domain([0, 0.33, 0.66, 1])
-                                .range(["red", "orange", "yellow", "green"]);
-                            return colorScale(d.data.similarity_score || 0);
-                        })
-                        .attr("r", 50)
-                        .attr("cx", (d) => d.x)
-                        .attr("cy", (d) => d.y)
-                        .on("click", (event, d) => onNodeClick && onNodeClick(d.data))
-            );
+    // ========== Draw Nodes ==========
+    g.selectAll(".node")
+      // We bind the *hierarchy-based* nodes, so only once per unique node
+      .data(allNodes, (d) => d.data.id)
+      .join(
+        (enter) =>
+          enter
+            .append("circle")
+            .attr("class", "node")
+            .attr("fill", (d) => {
+              const colorScale = d3
+                .scaleLinear()
+                .domain([0, 0.33, 0.66, 1])
+                .range(["red", "orange", "yellow", "green"]);
+              return colorScale(d.data.similarity_score || 0);
+            })
+            .attr("r", 0) // start with r=0 for an animation effect
+            .attr("cx", (d) => d.x)
+            .attr("cy", (d) => d.y)
+            .on("click", (event, d) => onNodeClick?.(d.data))
+            .transition()
+            .duration(500)
+            .attr("r", 30), // final radius
+        (update) =>
+          update
+            .attr("cx", (d) => d.x)
+            .attr("cy", (d) => d.y),
+        (exit) => exit.remove()
+      );
 
-        // Stagger new nodes animation
-        newNodes.forEach((node, index) => {
-            d3.timeout(() => {
-                g.append("circle")
-                    .attr("class", "node-new")
-                    .attr("r", 0)
-                    .attr("fill", () => {
-                        const colorScale = d3.scaleLinear()
-                            .domain([0, 0.33, 0.66, 1])
-                            .range(["red", "orange", "yellow", "green"]);
-                        return colorScale(node.data.similarity_score || 0);
-                    })
-                    .attr("cx", node.parent ? node.parent.x : node.x)
-                    .attr("cy", node.parent ? node.parent.y : node.y)
-                    .on("click", (event) => onNodeClick && onNodeClick(node.data))
-                    .transition()
-                    .duration(500)
-                    .attr("r", 50)
-                    .attr("cx", node.x)
-                    .attr("cy", node.y);
+    // ========== Draw Labels ==========
+    g.selectAll(".label")
+      .data(allNodes, (d) => d.data.id)
+      .join(
+        (enter) =>
+          enter
+            .append("text")
+            .attr("class", "label")
+            .attr("text-anchor", "middle")
+            .style("font-size", "14px")
+            .attr("x", (d) => d.x)
+            .attr("y", (d) => d.y - 35)
+            .text((d) => d.data.title || d.data.label || "No Label"),
+        (update) =>
+          update
+            .attr("x", (d) => d.x)
+            .attr("y", (d) => d.y - 35)
+            .text((d) => d.data.title || d.data.label || "No Label"),
+        (exit) => exit.remove()
+      );
+  }, [graph, rootId, onNodeClick]);
 
-                // Append label after node
-                g.append("text")
-                    .attr("class", "label")
-                    .attr("text-anchor", "middle")
-                    .style("font-size", "14px")
-                    .attr("x", node.x)
-                    .attr("y", node.y - 10)
-                    .text(node.data.label);
-            }, index * 100); // Delay animation based on index
-        });
-
-
-
-        // Draw labels
-        g.selectAll(".label-existing")
-            .data(nodes.filter((node) => !newNodes.includes(node)), (d) => d.data.id)
-            .join(
-                (enter) =>
-                    enter
-                        .append("text")
-                        .attr("class", "label-existing")
-                        .attr("text-anchor", "middle")
-                        .style("font-size", "14px")
-                        .attr("x", (d) => d.x)
-                        .attr("y", (d) => d.y - 10)
-                        .text((d) => d.data.label)
-            );
-
-
-        // Update the sets of existing node and link IDs
-        setExistingNodeIds(new Set([...existingNodeIds, ...currentNodeIds]));
-        setExistingLinkIds(new Set([...existingLinkIds, ...currentLinkIds]));
-    }, [data]);
-
-    return (
-        <div style={{ position: "relative" }}>
-            <svg ref={svgRef}>
-                <g ref={gRef}></g>
-            </svg>
-        </div>
-    );
+  return (
+    <div style={{ position: "relative" }}>
+      <svg ref={svgRef}>
+        <g ref={gRef}></g>
+      </svg>
+    </div>
+  );
 };
 
 export default TreeVisualization;

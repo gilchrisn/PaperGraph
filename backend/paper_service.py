@@ -47,34 +47,27 @@ class PaperService:
         """
         Process a single reference: check relationships, compute similarity, and update the database.
         """
-        print("checkpoint 3")
+        # print("checkpoint 3")
         ref_id = ref_paper["id"]
         ref_entry = self.fetch_or_insert_reference(root_paper_id, ref_id)
 
-        print("checkpoint 4")
-        print(ref_entry)
-        print(type(ref_entry))
-        print(ref_entry["similarity_score"])
+        # print("checkpoint 4")
         if ref_entry and ref_entry["similarity_score"] is not None:
-            print("checkpoint 4.1")
+            # print("checkpoint 4.1")
             return ref_entry["similarity_score"], ref_entry["relationship_type"], ref_entry["remarks"]
 
-        print("checkpoint 5")
+        # print("checkpoint 5")
         root_paper = self.repository.get_paper_by_id(root_paper_id)
         if not root_paper or "filepath" not in root_paper:
             raise HTTPException(status_code=500, detail="Root paper filepath not found")
-
-
-        print("checkpoint 6")
+        # print("checkpoint 6")
         similarity_score, relationship_type, remarks = get_similarity(
             root_paper["filepath"], ref_paper["filepath"]
         )
-        print("checkpoint 7")
+        # print("checkpoint 7")
         self.repository.insert_reference(root_paper_id, ref_id, relationship_type, remarks, float(similarity_score))
         explored_papers.add(ref_id)
-
-
-        print("checkpoint 8")
+        # print("checkpoint 8")
         return similarity_score, relationship_type, remarks
 
     def process_references(self, root_paper_id: str, cited_paper_id: str, explored_papers: set, similarity_threshold = 0.88):
@@ -86,29 +79,29 @@ class PaperService:
         if not paper:
             print(f"Paper with ID {cited_paper_id} not found")
             return {}
-        print("checkpoint 1")
+        # print("checkpoint 1")
 
         reference_titles = extract_metadata(paper["filepath"], "processReferences")
         if not reference_titles:
             print(f"Paper Title: {paper['title']} has no references")
             return {}
 
-        print("checkpoint 2")
+        # print("checkpoint 2")
         reference_ids = {}
         for reference in reference_titles:
-            print("checkpoint 2.1")
+            # print("checkpoint 2.1")
             ref_paper = self.repository.find_similar_papers_by_title(reference, 0.5)
     
             if ref_paper and ref_paper["id"] not in explored_papers:
                 similarity_score, relationship_type, remarks = self.process_reference(root_paper_id, ref_paper, explored_papers)
-                print("checkpoint 9")
+                # print("checkpoint 9")
                 if similarity_score < similarity_threshold:
-                    print("checkpoint 9.1")
+                    # print("checkpoint 9.1")
                     explored_papers.add(ref_paper["id"])
-                    print("checkpoint 9.2")
+                    # print("checkpoint 9.2")
                 reference_ids[ref_paper["id"]] = {"similarity_score": similarity_score, "relationship_type": relationship_type, "remarks": remarks}
-                print("checkpoint 9.3")
-        print("checkpoint 10")
+        #         print("checkpoint 9.3")
+        # print("checkpoint 10")
         return reference_ids
 
     async def explore_paper(
@@ -160,15 +153,15 @@ class PaperService:
             explored_papers.add(cited_paper_id)
             reference_ids = self.process_references(root_paper_id, cited_paper_id, explored_papers, similarity_threshold)
 
-            print("checkpoint 11")
+            # print("checkpoint 11")
             nodes = [{
                     "id": ref_id,
-                    "title": self.repository.get_paper_by_id(cited_paper_id)["title"],
+                    "title": self.repository.get_paper_by_id(ref_id)["title"],
                     "similarity_score": float(ref_data["similarity_score"]),
                     "relationship_type": ref_data["relationship_type"],
                     "remarks": ref_data["remarks"],
                     } for ref_id, ref_data in reference_ids.items()]
-            print("checkpoint 12")
+            # print("checkpoint 12")
             nodes.append({
                 "id": root_paper_id,
                 "title": self.repository.get_paper_by_id(root_paper_id)["title"],
@@ -176,25 +169,26 @@ class PaperService:
                 "relationship_type": None,
                 "remarks": None,
             })
-            print("checkpoint 13")
+
+            print("-" * 50)
+            for node in nodes:
+                print(f"Node: {node['id']} {node['title']}")
+            # print("checkpoint 13")
             await websocket.send_json({
                 "nodes": nodes,
                 "links": [{"source": cited_paper_id, "target": ref_id} for ref_id in reference_ids.keys()],
             })
-            print("checkpoint 14")
+            # print("checkpoint 14")
             # Insert new nodes into the frontier
             for node in nodes:
-                frontier.insert(node)
-            
-            print("checkpoint 15")
-            print(frontier.is_empty)
+                frontier.insert(node)    
+            # print("checkpoint 15")
             while not frontier.is_empty():
-                print("checkpoint 15.1")
+                # print("checkpoint 15.1")
                 next_paper = frontier.pop()
-                print()
-                print("checkpoint 15.2")
+                # print("checkpoint 15.2")
                 if next_paper["id"] not in explored_papers:
-                    print("checkpoint 15.3")
+                    # print("checkpoint 15.3")
                     await self.explore_paper(websocket, root_paper_id, next_paper["id"], explored_papers, frontier, max_depth, current_depth + 1, similarity_threshold, traversal_type)
 
         except Exception as e:

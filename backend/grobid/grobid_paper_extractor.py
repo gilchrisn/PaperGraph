@@ -49,7 +49,7 @@ def extract_tei_from_pdf(pdf_path):
         print(f"Error extracting TEI XML: {response.status_code}")
         return None
 
-def extract_filtered_sections_from_tei(tei_xml, keywords):
+def extract_filtered_sections_from_tei(tei_xml, keywords=HEAD_KEYWORDS):
     """
     Extract filtered sections (titles and content) based on keywords from the TEI XML.
 
@@ -126,6 +126,36 @@ def format_extracted_data(title, abstract, references, sections):
         formatted_data.append(f"\n{section_title}:\n{content[len(section_title):]}")  # Truncate content for brevity
 
     return "\n".join(formatted_data)
+
+
+# Extract everything metadata, title, abstract, references, and filtered sections then format the output
+def extract_all_metadata(pdf_path):
+    """
+    Extract all metadata, title, abstract, references, and filtered sections from a PDF.
+
+    Parameters:
+        pdf_path (str): Path to the PDF file.
+
+    Returns:
+        str: Formatted string of the extracted data.
+    """
+    # Extract TEI XML
+    tei_xml = extract_tei_from_pdf(pdf_path)
+
+    if tei_xml:
+        # Extract filtered sections
+        filtered_sections = extract_filtered_sections_from_tei(tei_xml, HEAD_KEYWORDS)
+
+    # Extract title and abstract
+    metadata = extract_metadata(pdf_path, "processHeaderDocument")
+    title = metadata["title"] if metadata else "Title extraction failed."
+    abstract = metadata["abstract"] if metadata else "Abstract extraction failed."
+
+    # Extract reference titles
+    references = extract_metadata(pdf_path, "processReferences") or []
+
+    # Format and return the extracted data
+    return format_extracted_data(title, abstract, references, filtered_sections)
 
 # Example usage
 if __name__ == "__main__":
