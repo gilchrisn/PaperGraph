@@ -71,7 +71,7 @@ class PaperRepository:
                 )
                 conn.commit()
 
-    def find_similar_papers_by_title(self, reference_title: str, title_similarity_threshold: float = 0.5):
+    def find_similar_papers_by_title(self, reference_title: str, title_similarity_threshold: float = 0.8):
         """
         Find papers similar to a given title using PostgreSQL similarity.
         """
@@ -88,3 +88,12 @@ class PaperRepository:
                     (reference_title, reference_title, title_similarity_threshold)
                 )
                 return cursor.fetchone()
+            
+    def get_referencing_paper(self, cited_paper_id: str):
+        """
+        Fetch all papers that reference a given paper by its ID.
+        """
+        with init_db_connection() as conn:
+            with conn.cursor() as cursor:
+                cursor.execute("SELECT * FROM reference WHERE cited_paper_id = %s;", (cited_paper_id,))
+                return cursor.fetchall()

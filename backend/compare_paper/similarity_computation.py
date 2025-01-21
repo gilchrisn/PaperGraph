@@ -5,14 +5,14 @@ from grobid.grobid_paper_extractor import extract_metadata, extract_all_metadata
 from openai_service.prompt_chatgpt import prompt_chatgpt
 import json
 
-# def get_similarity(paper_1_path, paper_2_path):
-#     paper_1_abstract = extract_metadata(paper_1_path, "processHeaderDocument")["abstract"]
-#     paper_2_abstract = extract_metadata(paper_2_path, "processHeaderDocument")["abstract"]
+def get_similarity(paper_1_path, paper_2_path):
+    paper_1_abstract = extract_metadata(paper_1_path, "processHeaderDocument")["abstract"]
+    paper_2_abstract = extract_metadata(paper_2_path, "processHeaderDocument")["abstract"]
 
-#     embeddings_paper_1 = generate_embedding(paper_1_abstract)
-#     embeddings_paper_2 = generate_embedding(paper_2_abstract)
+    embeddings_paper_1 = generate_embedding(paper_1_abstract)
+    embeddings_paper_2 = generate_embedding(paper_2_abstract)
 
-#     return cosine_similarity(embeddings_paper_1, embeddings_paper_2)[0][0], "citation", "lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua"
+    return cosine_similarity(embeddings_paper_1, embeddings_paper_2)[0][0], "citation", "lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua"
 
 
 def get_similarity(paper_1_path, paper_2_path):
