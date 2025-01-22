@@ -67,7 +67,7 @@ async def explore_paper(
         await paper_service.explore_paper(
             websocket, 
             root_paper_id=paper_id, 
-            cited_paper_id=paper_id,
+            start_paper_id=paper_id,
             max_depth=max_depth, 
             similarity_threshold=similarity_threshold,
             traversal_type=traversal_type,

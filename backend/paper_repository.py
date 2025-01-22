@@ -89,11 +89,13 @@ class PaperRepository:
                 )
                 return cursor.fetchone()
             
-    def get_referencing_paper(self, cited_paper_id: str):
+    def get_referencing_papers(self, cited_paper_id: str):
         """
         Fetch all papers that reference a given paper by its ID.
         """
         with init_db_connection() as conn:
             with conn.cursor() as cursor:
                 cursor.execute("SELECT * FROM reference WHERE cited_paper_id = %s;", (cited_paper_id,))
-                return cursor.fetchall()
+                referencing_papers =  cursor.fetchall()
+
+                return [paper["source_paper_id"] for paper in referencing_papers]

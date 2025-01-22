@@ -1,22 +1,20 @@
 import React, { useEffect, useRef } from "react";
 import * as d3 from "d3";
 
-const GraphVisualization = ({ nodes, links }) => {
-    const svgRef = useRef(); // Reference to the SVG container
+const GraphVisualization = ({ nodes, links, onNodeClick, width = 800, height = 600 }) => {
+    const svgRef = useRef();
 
     useEffect(() => {
-        const svg = d3.select(svgRef.current); // Select the SVG container
-        const width = 800; // Width of the SVG
-        const height = 600; // Height of the SVG
-        
-        // Define a force simulation for layout
-        const simulation = d3.forceSimulation(nodes)
+        const svg = d3.select(svgRef.current);
+        // Clear any old render
+        svg.selectAll("*").remove();
+
+        // Force simulation
+        const simulation = d3
+            .forceSimulation(nodes)
             .force("link", d3.forceLink(links).id((d) => d.id).distance(100))
             .force("charge", d3.forceManyBody().strength(-300))
             .force("center", d3.forceCenter(width / 2, height / 2));
-
-        // Remove old elements before drawing new ones
-        svg.selectAll("*").remove();
 
         // Draw links
         const link = svg
@@ -25,7 +23,7 @@ const GraphVisualization = ({ nodes, links }) => {
             .data(links)
             .join("line")
             .attr("stroke", "#999")
-            .attr("stroke-width", 2);
+            .attr("stroke-width", 1.5);
 
         // Draw nodes
         const node = svg
@@ -35,20 +33,23 @@ const GraphVisualization = ({ nodes, links }) => {
             .join("circle")
             .attr("r", 10)
             .attr("fill", "#69b3a2")
-            .call(drag(simulation));
+            .call(drag(simulation))
+            .on("click", (event, d) => {
+                if (onNodeClick) onNodeClick(d);
+            });
 
-        // Add labels to nodes
-        const labels = svg
+        // Add labels near nodes
+        const label = svg
             .append("g")
             .selectAll("text")
             .data(nodes)
             .join("text")
             .attr("dy", -15)
             .attr("text-anchor", "middle")
-            .text((d) => d.label)
-            .style("font-size", "12px");
+            .style("font-size", "12px")
+            .text((d) => d.title ?? d.id);
 
-        // Update positions on every tick
+        // Update positions on each tick
         simulation.on("tick", () => {
             link
                 .attr("x1", (d) => d.source.x)
@@ -56,30 +57,19 @@ const GraphVisualization = ({ nodes, links }) => {
                 .attr("x2", (d) => d.target.x)
                 .attr("y2", (d) => d.target.y);
 
-            node
-                .attr("cx", (d) => d.x)
-                .attr("cy", (d) => d.y);
+            node.attr("cx", (d) => d.x).attr("cy", (d) => d.y);
 
-            labels
-                .attr("x", (d) => d.x)
-                .attr("y", (d) => d.y);
+            label.attr("x", (d) => d.x).attr("y", (d) => d.y);
         });
 
-        // Cleanup on unmount
+        // Cleanup
         return () => simulation.stop();
-    }, [nodes, links]);
+    }, [nodes, links, onNodeClick, width, height]);
 
-    return (
-        <svg
-            ref={svgRef}
-            width="800"
-            height="600"
-            style={{ border: "1px solid black" }}
-        ></svg>
-    );
+    return <svg ref={svgRef} width={width} height={height} style={{ border: "1px solid black" }} />;
 };
 
-// Drag behavior for nodes
+// Drag behavior
 const drag = (simulation) => {
     function dragStarted(event, d) {
         if (!event.active) simulation.alphaTarget(0.3).restart();

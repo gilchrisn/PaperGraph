@@ -1,190 +1,256 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { createWebSocket } from "../utils/websocket";
-import TreeVisualization from "../components/TreeVisualization";
 import PaperDetails from "../components/PaperDetails";
-import { max } from "d3";
+import TreeVisualization from "../components/TreeVisualization"; // <-- Changed
+import PropTypes from "prop-types";
 
-const Explore = () => {
-    const { id } = useParams(); // Paper ID from the route
+/**
+ * EXPLORE PAPER COMPONENT
+ * Main component for exploring paper relationships
+ * Implements Nielsen's heuristics through:
+ * - Clear system status (loading/errors)
+ * - Match between system and real world (natural language)
+ * - Consistency and standards
+ * - Error prevention
+ */
+const ExplorePaper = () => {
+  const { id: paperId } = useParams(); // Get paper ID from URL
 
-    // Master graph state: always up-to-date with new data from WebSocket
-    const [graph, setGraph] = useState({ nodes: [], links: [] });
+  // Main graph state
+  const [graph, setGraph] = useState({ nodes: [], links: [] });
+  const [graphPhases, setGraphPhases] = useState({
+    downward: { nodes: [], links: [] },
+    upward: { nodes: [], links: [] }
+  });
 
-    const [selectedPaper, setSelectedPaper] = useState(null);
-    const [similarNodes, setSimilarNodes] = useState([]);
-    const [maxDepth, setMaxDepth] = useState(5);
-    const [similarityThreshold, setSimilarityThreshold] = useState(0.88);
-    const [traversalType, setTraversalType] = useState("bfs");
+  // UI States
+  const [selectedPaper, setSelectedPaper] = useState(null);
+  const [similarNodes, setSimilarNodes] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-    // Temp states for the form
-    const [tempMaxDepth, setTempMaxDepth] = useState(maxDepth);
-    const [tempSimilarityThreshold, setTempSimilarityThreshold] = useState(similarityThreshold);
-    const [tempTraversalType, setTempTraversalType] = useState(traversalType);
+  // Exploration Parameters
+  const [params, setParams] = useState({
+    maxDepth: 5,
+    similarityThreshold: 0.88,
+    traversalType: "bfs"
+  });
 
-    // Recalculate similarNodes whenever graph or similarityThreshold changes
-    useEffect(() => {
-        // We only consider nodes that meet threshold
-        const filteredAndSorted = graph.nodes
-            .filter((n) => n.similarity_score >= similarityThreshold && n.id !== id)
-            .sort((a, b) => b.similarity_score - a.similarity_score);
-        setSimilarNodes(filteredAndSorted);
-    }, [graph, similarityThreshold, id]);
+  // Temporary form state
+  const [draftParams, setDraftParams] = useState({ ...params });
 
-    // On mount (or when parameters change), open WebSocket
-    useEffect(() => {
-        setGraph({ nodes: [], links: [] }); // Clear the graph
+  // Update similar papers when graph or threshold changes
+  useEffect(() => {
+    const threshold = params.similarityThreshold;
+    const filtered = graph.nodes.filter(
+      (node) => node.similarity_score >= threshold && node.id !== paperId
+    );
+    setSimilarNodes(filtered.sort((a, b) => b.similarity_score - a.similarity_score));
+  }, [graph, params.similarityThreshold, paperId]);
 
-        const handleMessage = (data) => {
+  // WebSocket management
+  useEffect(() => {
+    setIsLoading(true);
+    setError(null);
+    setGraph({ nodes: [], links: [] });
+    setGraphPhases({
+      downward: { nodes: [], links: [] },
+      upward: { nodes: [], links: [] }
+    });
 
-            if (data.status === "Max exploration depth reached") {
-                console.log("Tree construction complete.");
-                return;
-            }
+    const handleWebSocketMessage = (data) => {
+      // Handle system messages
+      if (data.status) {
+        if (data.status === "error") {
+          setError(data.message);
+          setIsLoading(false);
+        }
+        return;
+      }
 
-            // Merge incoming data into our master `graph`
-            setGraph((prevGraph) => {
-                // Merge nodes
-                const existingNodeIds = new Set(prevGraph.nodes.map((n) => n.id));
-                const newNodes = data.nodes.filter((n) => !existingNodeIds.has(n.id));
-                const mergedNodes = [...prevGraph.nodes, ...newNodes];
+      // Handle graph updates
+      if (data.phase && data.nodes && data.links) {
+        setGraphPhases((prev) => ({
+          ...prev,
+          [data.phase]: {
+            nodes: [...prev[data.phase].nodes, ...data.nodes],
+            links: [...prev[data.phase].links, ...data.links]
+          }
+        }));
 
-                // Merge links
-                const existingLinks = new Set(
-                    prevGraph.links.map((l) => `${l.source}-${l.target}`)
-                );
-                const newLinks = data.links.filter(
-                    (l) => !existingLinks.has(`${l.source}-${l.target}`)
-                );
-                const mergedLinks = [...prevGraph.links, ...newLinks];
-
-                return { nodes: mergedNodes, links: mergedLinks };
-            });
-        };
-
-        const socket = createWebSocket(
-            id,
-            handleMessage,
-            maxDepth,
-            similarityThreshold,
-            traversalType
-        );
-
-        socket.onerror = (error) => {
-            console.error("WebSocket error:", error);
-        };
-
-        // Clean up when component unmounts
-        return () => {
-            socket.close();
-        };
-    }, [id, maxDepth, similarityThreshold, traversalType]);
-
-    const handleParameterChange = () => {
-        setMaxDepth(tempMaxDepth);
-        setSimilarityThreshold(tempSimilarityThreshold);
-        setTraversalType(tempTraversalType);
+        // Merge all phases for full visualization
+        setGraph((prevGraph) => {
+            // 1) Deduplicate nodes
+            const existingNodeIds = new Set(prevGraph.nodes.map((n) => n.id));
+            const dedupedNewNodes = data.nodes.filter((n) => !existingNodeIds.has(n.id));
+            const mergedNodes = [...prevGraph.nodes, ...dedupedNewNodes];
+          
+            // 2) Deduplicate links
+            // For links, a good “unique” signature is `${source}-${target}` or similar
+            const existingLinks = new Set(
+              prevGraph.links.map((l) => `${l.source}-${l.target}`)
+            );
+            const dedupedNewLinks = data.links.filter(
+              (l) => !existingLinks.has(`${l.source}-${l.target}`)
+            );
+            const mergedLinks = [...prevGraph.links, ...dedupedNewLinks];
+          
+            return { nodes: mergedNodes, links: mergedLinks };
+          });
+      }
     };
 
-    return (
-        <div style={{ display: "flex", height: "100vh" }}>
-            {/* Left Section */}
-            <div
-                style={{
-                    flex: 3,
-                    padding: "10px",
-                    borderRight: "1px solid #ccc",
-                    overflowY: "auto",
-                }}
-            >
-                <h1>Exploring References for Paper: {id}</h1>
-
-                <div id="tree-container" style={{ marginBottom: "20px" }}>
-                    {/* Pass the entire merged graph to TreeVisualization */}
-                    <TreeVisualization
-                        graph={graph}
-                        rootId={id} // We'll treat the current paper as the tree's root
-                        onNodeClick={(node) => setSelectedPaper(node)}
-                        id={similarityThreshold + traversalType + maxDepth}
-                    />
-                </div>
-
-                {/* Parameter Controls */}
-                <div style={{ marginBottom: "20px" }}>
-                    <h3>Set Parameters</h3>
-                    <label>
-                        Similarity Threshold:
-                        <input
-                            type="number"
-                            step="0.01"
-                            min="0"
-                            max="1"
-                            value={tempSimilarityThreshold}
-                            onChange={(e) => setTempSimilarityThreshold(+e.target.value)}
-                        />
-                    </label>
-                    <br />
-                    <label>
-                        Max Depth:
-                        <input
-                            type="number"
-                            min="1"
-                            value={tempMaxDepth}
-                            onChange={(e) => setTempMaxDepth(+e.target.value)}
-                        />
-                    </label>
-                    <br />
-                    <label>
-                        Traversal Type:
-                        <select
-                            value={tempTraversalType}
-                            onChange={(e) => setTempTraversalType(e.target.value)}
-                        >
-                            <option value="bfs">Breadth-First Search</option>
-                            <option value="dfs">Depth-First Search</option>
-                            <option value="priority">Dijkstra's Algorithm</option>
-                        </select>
-                    </label>
-                    <br />
-                    <button onClick={handleParameterChange}>Apply Changes</button>
-                </div>
-
-                {/* Similar Papers List */}
-                <h2>Similar Papers</h2>
-                {similarNodes.length > 0 ? (
-                    <ol>
-                        {similarNodes.map((node) => (
-                            <li
-                                key={node.id}
-                                style={{
-                                    cursor: "pointer",
-                                    color: "blue",
-                                    textDecoration: "underline",
-                                }}
-                                onClick={() => setSelectedPaper(node)}
-                            >
-                                {node.title} (Score: {node.similarity_score.toFixed(2)})
-                            </li>
-                        ))}
-                    </ol>
-                ) : (
-                    <p>
-                        No nodes found with similarity ≥ {similarityThreshold}.
-                    </p>
-                )}
-            </div>
-
-            {/* Right Section: Paper Details */}
-            <div style={{ flex: 1, padding: "10px", overflowY: "auto" }}>
-                <h2>Paper Details</h2>
-                {selectedPaper ? (
-                    <PaperDetails paper={selectedPaper} />
-                ) : (
-                    <p>Select a paper from the list or tree to view details.</p>
-                )}
-            </div>
-        </div>
+    // Initialize WebSocket connection
+    const socket = createWebSocket(
+      paperId,
+      handleWebSocketMessage,
+      params.maxDepth,
+      params.similarityThreshold,
+      params.traversalType
     );
+
+    socket.onopen = () => setIsLoading(false);
+    socket.onerror = (err) => {
+      setError("Connection failed. Please try again.");
+      setIsLoading(false);
+    };
+
+    return () => socket.close();
+  }, [paperId, params]);
+
+  // Handle parameter changes with validation
+  const handleParamChange = (field, value) => {
+    let processedValue = value;
+
+    if (field === "similarityThreshold") {
+      processedValue = Math.min(1, Math.max(0, Number(value)));
+    }
+
+    setDraftParams((prev) => ({ ...prev, [field]: processedValue }));
+  };
+
+  const applyNewParams = () => {
+    if (draftParams.similarityThreshold > 1 || draftParams.similarityThreshold < 0) {
+      setError("Similarity must be between 0 and 1");
+      return;
+    }
+    setParams({ ...draftParams });
+  };
+
+  // RENDERING
+  return (
+    <div className="explore-container">
+      {/* Loading/Error Overlay */}
+      {isLoading && <div className="status-banner">Loading paper network...</div>}
+      {error && <div className="status-banner error">{error}</div>}
+
+      <div className="content-wrapper">
+        {/* Visualization Panel */}
+        <section className="visualization-panel">
+          <h1>Exploring Connections for Paper: {paperId}</h1>
+
+          <TreeVisualization
+            graph={graph}
+            rootId={paperId}
+            onNodeClick={setSelectedPaper}
+            downwardData={graphPhases.downward}
+            upwardData={graphPhases.upward}
+            width={800}
+            height={600}
+          />
+
+          {/* Parameter Controls */}
+          <div className="parameter-controls">
+            <h2>Exploration Settings</h2>
+            <div className="input-group">
+              <label>
+                Similarity Threshold (0-1):
+                <input
+                  type="number"
+                  step="0.01"
+                  value={draftParams.similarityThreshold}
+                  onChange={(e) => handleParamChange("similarityThreshold", e.target.value)}
+                  min="0"
+                  max="1"
+                />
+              </label>
+            </div>
+
+            <div className="input-group">
+              <label>
+                Search Depth:
+                <input
+                  type="number"
+                  value={draftParams.maxDepth}
+                  onChange={(e) => handleParamChange("maxDepth", e.target.value)}
+                  min="1"
+                  max="10"
+                />
+              </label>
+            </div>
+
+            <div className="input-group">
+              <label>
+                Exploration Method:
+                <select
+                  value={draftParams.traversalType}
+                  onChange={(e) => handleParamChange("traversalType", e.target.value)}
+                >
+                  <option value="bfs">Breadth-First Search</option>
+                  <option value="dfs">Depth-First Search</option>
+                  <option value="priority">Priority (Similarity)</option>
+                </select>
+              </label>
+            </div>
+
+            <button onClick={applyNewParams} disabled={isLoading}>
+              {isLoading ? "Applying..." : "Update Exploration"}
+            </button>
+          </div>
+        </section>
+
+        {/* Similar Papers List */}
+        <section className="similar-papers">
+          <h2>Highly Similar Papers</h2>
+          {similarNodes.length > 0 ? (
+            <ul className="paper-list">
+              {similarNodes.map((node) => (
+                <li
+                  key={node.id}
+                  onClick={() => setSelectedPaper(node)}
+                  className="paper-item"
+                >
+                  <span className="paper-title">{node.title}</span>
+                  <span className="similarity-score">
+                    {node.similarity_score.toFixed(2)}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="empty-state">
+              No papers meet the similarity threshold ({params.similarityThreshold})
+            </p>
+          )}
+        </section>
+
+        {/* Paper Details Sidebar */}
+        <section className="details-sidebar">
+          <h2>Paper Details</h2>
+          {selectedPaper ? (
+            <PaperDetails paper={selectedPaper} />
+          ) : (
+            <p className="instruction">
+              ← Select a paper from the graph or list to view details
+            </p>
+          )}
+        </section>
+      </div>
+    </div>
+  );
 };
 
-export default Explore;
+ExplorePaper.propTypes = {};
+
+export default ExplorePaper;
