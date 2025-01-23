@@ -116,7 +116,10 @@ const ExplorePaper = () => {
       setIsLoading(false);
     };
 
-    return () => socket.close();
+    return () => {
+        console.log("WWHY CLOSEEEE");
+        socket.close();
+      };
   }, [paperId, params]);
 
   // Handle parameter changes with validation
@@ -156,8 +159,9 @@ const ExplorePaper = () => {
             onNodeClick={setSelectedPaper}
             downwardData={graphPhases.downward}
             upwardData={graphPhases.upward}
-            width={800}
+            width={1600}
             height={600}
+            similarityThreshold={params.similarityThreshold}
           />
 
           {/* Parameter Controls */}

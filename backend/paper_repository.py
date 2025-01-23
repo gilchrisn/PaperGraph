@@ -71,7 +71,7 @@ class PaperRepository:
                 )
                 conn.commit()
 
-    def find_similar_papers_by_title(self, reference_title: str, title_similarity_threshold: float = 0.8):
+    def find_similar_papers_by_title(self, reference_title: str, title_similarity_threshold: float = 0.6):
         """
         Find papers similar to a given title using PostgreSQL similarity.
         """

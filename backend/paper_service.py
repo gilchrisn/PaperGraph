@@ -111,6 +111,69 @@ class PaperService:
 
         return reference_ids
 
+    def process_parents(
+        self,
+        root_paper_id: str,
+        child_paper_id: str,
+        explored_papers: set,
+        similarity_threshold: float = 0.88
+    ) -> dict:
+        """
+        Fetch all parents (papers referencing `child_paper_id`), 
+        compute/verify similarity to the root paper, and filter by threshold.
+        
+        Returns a dict of { parent_id: {similarity_score, relationship_type, remarks} } 
+        for those above the similarity threshold.
+        """
+
+        referencing_papers = self.get_referencing_papers(child_paper_id)
+        if not referencing_papers:
+            return {}
+
+        parents_dict = {}
+        for parent_id in referencing_papers:
+            if parent_id in explored_papers:
+                continue
+
+            parent_paper = self.repository.get_paper_by_id(parent_id)
+            if not parent_paper:
+                continue
+
+            # Check if we already have a reference entry (root -> parent)
+            ref_entry = self.repository.get_reference_by_paper_ids(root_paper_id, parent_id)
+            if ref_entry and ref_entry["similarity_score"] is not None:
+                similarity_score = ref_entry["similarity_score"]
+                relationship_type = ref_entry["relationship_type"]
+                remarks = ref_entry["remarks"]
+            else:
+                # Compute similarity with the root paper if not stored yet
+                root_path = self.get_pdf_path(root_paper_id)
+                parent_path = parent_paper.get("filepath", None)
+
+                if not root_path or not parent_path:
+                    continue
+
+                similarity_score, relationship_type, remarks = get_similarity(root_path, parent_path)
+                print("similarity score: " + str(similarity_score))
+                # Store the reference record in DB
+                self.repository.insert_reference(
+                    root_paper_id, parent_id, relationship_type, remarks, float(min(1.0, similarity_score))
+                )
+
+            # If below threshold, mark as explored so we don't revisit
+            if similarity_score < similarity_threshold:
+                explored_papers.add(parent_id)
+                
+
+            # Otherwise, keep this parent
+            parents_dict[parent_id] = {
+                "similarity_score": similarity_score,
+                "relationship_type": relationship_type,
+                "remarks": remarks,
+            }
+
+        return parents_dict
+
     def get_referencing_papers(self, paper_id: str):
         """
         Fetch all papers that reference a given paper (parents).
@@ -137,6 +200,7 @@ class PaperService:
         Sends partial updates to WebSocket (phase="downward").
         Returns the set of discovered paper IDs (including the start paper).
         """
+
         # If we have exceeded the max depth, notify and return
         if current_depth > max_depth:
             await websocket.send_json({"status": "Max exploration depth reached"})
@@ -180,7 +244,7 @@ class PaperService:
             )
 
         # Build links from the current paper -> references
-        links = [{"source": start_paper_id, "target": ref_id} for ref_id in reference_ids.keys()]
+        links = [{"source": start_paper_id, "target": ref_id} for ref_id in reference_ids.keys() if ref_id]
 
         # Send partial update
         await websocket.send_json(
@@ -225,85 +289,119 @@ class PaperService:
         self,
         websocket: WebSocket,
         root_paper_id: str,
-        paper_id: str,
-        explored_upwards: set,
+        start_paper_id: str,
+        explored_papers: set,
+        frontier,
         max_depth: int,
         current_depth: int,
         similarity_threshold: float,
-    ):
+        traversal_type: str
+    ) -> set:
         """
-        Explore referencing (upwards) from the given paper.
-        Sends partial updates to WebSocket (phase="upward").
-        Returns the set of discovered (parent) paper IDs.
+        Explore referencing (upwards) from `start_paper_id` using BFS/DFS/Priority,
+        mirroring the approach of `explore_downward`.
+        
+        Sends partial updates (phase="upward") for newly discovered parents.
+        Returns the set of discovered paper IDs (including the start paper).
         """
+
+        # 1. Depth check
         if current_depth > max_depth:
+            await websocket.send_json({"status": "Max upward depth reached"})
             return set()
 
-        if paper_id in explored_upwards:
+        # 2. If already explored, skip
+        if start_paper_id in explored_papers:
             return set()
 
-        discovered_parents = set()
-        referencing_papers = self.get_referencing_papers(paper_id)
+        explored_papers.add(start_paper_id)
 
+        # 3. Process parents (root->parent >= threshold)
+        parents_dict = self.process_parents(
+            root_paper_id, 
+            start_paper_id, 
+            explored_papers, 
+            similarity_threshold
+        )
+
+        # 4. Build nodes for JSON
         nodes = []
-        links = []
-
-        for parent_id in referencing_papers:
-            if parent_id in explored_upwards:
+        for parent_id, parent_data in parents_dict.items():
+            if parent_id in explored_papers:
                 continue
 
             parent_paper = self.repository.get_paper_by_id(parent_id)
-
-            # Check similarity (root->parent_id)
-            ref_entry = self.repository.get_reference_by_paper_ids(root_paper_id, parent_id)
-            if ref_entry and ref_entry["similarity_score"] >= similarity_threshold:
-                discovered_parents.add(parent_id)
-                # Add node
-                nodes.append(
-                    {
-                        "id": parent_id,
-                        "title": parent_paper["title"],
-                        "similarity_score": float(ref_entry["similarity_score"]),
-                        "relationship_type": ref_entry["relationship_type"],
-                        "remarks": ref_entry["remarks"],
-                    }
-                )
-                # Add link from parent -> paper_id
-                links.append({"source": parent_id, "target": paper_id})
-
-        # Also add the current paper node to keep a cohesive graph
-        cur_paper = self.repository.get_paper_by_id(paper_id)
-        if cur_paper:
+            if not parent_paper:
+                continue
             nodes.append(
                 {
-                    "id": paper_id,
-                    "title": cur_paper["title"],
-                    "similarity_score": 0.999 if paper_id != root_paper_id else 1.0,
+                    "id": parent_id,
+                    "title": parent_paper["title"],
+                    "similarity_score": float(parent_data["similarity_score"]),
+                    "relationship_type": parent_data["relationship_type"],
+                    "remarks": parent_data["remarks"],
+                }
+            )
+
+        # 5. Build links from (parent -> start_paper_id)
+        links = [
+            {"source": parent["id"], "target": start_paper_id}
+            for parent in nodes
+        ]
+
+        # Also include the current paper node
+        current_paper_info = self.repository.get_paper_by_id(start_paper_id)
+        if current_paper_info:
+            nodes.append(
+                {
+                    "id": start_paper_id,
+                    "title": current_paper_info["title"],
+                    "similarity_score": 1.0 if start_paper_id == root_paper_id else 0.999,
                     "relationship_type": None,
                     "remarks": None,
                 }
             )
 
-        # Send an update if any new nodes/links appear
+        print("nodes: " + str(nodes))
+        
+
+        # 6. Send partial update
         if nodes or links:
-            await websocket.send_json({"phase": "upward", "nodes": nodes, "links": links})
-
-        # Mark this paper as explored so we don't re-run
-        explored_upwards.add(paper_id)
-
-        # Recursively explore parents
-        for parent_id in discovered_parents:
-            await self.explore_upward(
-                websocket,
-                root_paper_id,
-                parent_id,
-                explored_upwards,
-                max_depth,
-                current_depth + 1,
-                similarity_threshold
+            await websocket.send_json(
+                {
+                    "phase": "upward",
+                    "nodes": nodes,
+                    "links": links,
+                }
             )
 
-        return discovered_parents
+        # 7. Insert newly discovered parents into the frontier
+        discovered_nodes = {start_paper_id}
+        discovered_nodes.update(parents_dict.keys())
+        for node in nodes:
+            # Insert into BFS/DFS/priority queue
+            frontier.insert(node)
+
+        # 8. Continue BFS/DFS until frontier is empty
+        while not frontier.is_empty():
+            next_paper = frontier.pop()
+            pid = next_paper["id"]
+            if pid not in explored_papers:
+                child_nodes = await self.explore_upward(
+                    websocket,
+                    root_paper_id,
+                    pid,
+                    explored_papers,
+                    frontier,
+                    max_depth,
+                    current_depth + 1,
+                    similarity_threshold,
+                    traversal_type
+                )
+                discovered_nodes.update(child_nodes)
+
+        return discovered_nodes
+
 
     # -------------------------------------------------------------------------
     # PRIMARY PUBLIC METHOD
@@ -317,42 +415,28 @@ class PaperService:
         similarity_threshold: float = 0.88,
         traversal_type: str = "bfs",
     ):
-        """
-        1) Downward exploration from the start paper (references).
-        2) Then, for each discovered node (above threshold), do upward exploration.
-        """
-        # Validate traversal type
-        if traversal_type not in ["bfs", "dfs", "priority"]:
-            raise ValueError("Invalid traversal_type. Use 'bfs', 'dfs', or 'priority'.")
-
-        # Prepare BFS/DFS/priority queue for the downward pass
+        # 1. Downward BFS/DFS
         if traversal_type == "bfs":
-            frontier = Queue()
+            frontier_down = Queue()
         elif traversal_type == "dfs":
-            frontier = Stack()
+            frontier_down = Stack()
         else:
-            frontier = PriorityQueue(lambda x: -x["similarity_score"])
+            frontier_down = PriorityQueue(lambda x: -x["similarity_score"])
 
-        # 1. DOWNWARD EXPLORATION
         explored_papers_downward = set()
-        try:
-            discovered_nodes_downward = await self.explore_downward(
-                websocket=websocket,
-                root_paper_id=root_paper_id,
-                start_paper_id=start_paper_id,
-                explored_papers=explored_papers_downward,
-                frontier=frontier,
-                max_depth=max_depth,
-                current_depth=0,
-                similarity_threshold=similarity_threshold,
-                traversal_type=traversal_type,
-            )
-        except Exception as e:
-            await websocket.send_json({"status": "error", "message": str(e)})
-            raise HTTPException(status_code=500, detail=str(e))
+        discovered_nodes_downward = await self.explore_downward(
+            websocket=websocket,
+            root_paper_id=root_paper_id,
+            start_paper_id=start_paper_id,
+            explored_papers=explored_papers_downward,
+            frontier=frontier_down,
+            max_depth=max_depth,
+            current_depth=0,
+            similarity_threshold=similarity_threshold,
+            traversal_type=traversal_type,
+        )
 
-        # 2. UPWARD EXPLORATION for all discovered nodes that meet threshold
-        #    (excluding the root paper itself)
+        # 2. Filter qualified nodes (above threshold, excluding root)
         qualified_nodes = []
         for node_id in discovered_nodes_downward:
             if node_id == root_paper_id:
@@ -362,20 +446,38 @@ class PaperService:
                 if ref_entry["similarity_score"] >= similarity_threshold:
                     qualified_nodes.append(node_id)
 
-        # We can do a multi-step BFS/DFS upward for each qualified node
-        # (or you can unify them into one BFS, if you prefer).
-        explored_upwards = set()
+        # 3. For each qualified node, do an upward BFS/DFS
+        if traversal_type == "bfs":
+            frontier_up = Queue()
+        elif traversal_type == "dfs":
+            frontier_up = Stack()
+        else:
+            frontier_up = PriorityQueue(lambda x: -x["similarity_score"])
+
+        explored_upwards = explored_papers_downward.copy()
+        all_upward_nodes = set()
+
+        print("explored upward: " + str(explored_upwards) )
         for qnode_id in qualified_nodes:
-            try:
-                await self.explore_upward(
-                    websocket=websocket,
-                    root_paper_id=root_paper_id,
-                    paper_id=qnode_id,
-                    explored_upwards=explored_upwards,
-                    max_depth=1,  # or some other depth limit
-                    current_depth=0,
-                    similarity_threshold=similarity_threshold,
-                )
-            except Exception as e:
-                await websocket.send_json({"status": "error", "message": str(e)})
-                raise HTTPException(status_code=500, detail=str(e))
+            if qnode_id in explored_upwards:
+                explored_upwards.remove(qnode_id)
+
+            upward_discovered = await self.explore_upward(
+                websocket=websocket,
+                root_paper_id=root_paper_id,
+                start_paper_id=qnode_id,
+                explored_papers=explored_upwards,
+                frontier=frontier_up,
+                max_depth=1,  # or some other limit for upward expansion
+                current_depth=0,
+                similarity_threshold=similarity_threshold,
+                traversal_type=traversal_type,
+            )
+            all_upward_nodes.update(upward_discovered)
+
+        # 4. Return or log the union of all discovered upward nodes (above threshold)
+        return {
+            "downward_discovered": discovered_nodes_downward,
+            "upward_discovered": all_upward_nodes
+        }
+

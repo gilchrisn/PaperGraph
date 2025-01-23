@@ -20,7 +20,8 @@ paper_repository = PaperRepository()
 papers = paper_service.get_all_papers()
 invalid_references = []
 
-for paper in papers:
+for i, paper in enumerate(papers):
+    print(f"Processing paper {i + 1}/{len(papers)}")
     paper_path = paper["filepath"]
 
     paper_references = extract_metadata(paper_path, "processReferences")
