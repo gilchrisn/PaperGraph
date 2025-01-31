@@ -19,6 +19,7 @@ paper_repository = PaperRepository()
 
 papers = paper_service.get_all_papers()
 invalid_references = []
+error_references = []
 
 for i, paper in enumerate(papers):
     print(f"Processing paper {i + 1}/{len(papers)}")
@@ -33,15 +34,23 @@ for i, paper in enumerate(papers):
     for reference in paper_references:
         reference_paper = paper_repository.find_similar_papers_by_title(reference)
 
-        if reference_paper:
-            reference_id = reference_paper["id"]
+        try:
             
-            paper_service.fetch_or_insert_reference(paper["id"], reference_id)
+            if reference_paper:
+                reference_id = reference_paper["id"]
+                
+                paper_service.fetch_or_insert_reference(paper["id"], reference_id)
 
-            print("Reference inserted successfully.")
-        else:
-            print("Reference not found in the database.")
-            invalid_references.append(reference)
+                print("Reference inserted successfully.")
+            else:
+                print("Reference not found in the database.")
+                invalid_references.append(reference)
+        except Exception as e:
+            print("Error inserting reference:", e)
+            error_references.append(reference)
 
 print(len(invalid_references), "references not found in the database.")
 print("Invalid references:", invalid_references)
+
+print(len(error_references), "references failed to insert.")
+print("Error references:", error_references)

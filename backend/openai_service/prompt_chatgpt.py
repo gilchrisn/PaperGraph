@@ -28,9 +28,18 @@ def prompt_chatgpt(messages, model="gpt-4o-mini"):
             model=model,
             messages=messages
         )
-        return completion.choices[0].message
+
+        return parse_response(completion.choices[0].message.content)
     except Exception as e:
         return {"error": str(e)}
+    
+def parse_response(response):
+    cleaned_response = response.strip().strip('```json')
+
+    import json
+    # Parse response into a dictionary
+    response_dict = json.loads(cleaned_response)
+    return response_dict
 
 # Example Usage
 if __name__ == "__main__":

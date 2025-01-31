@@ -91,3 +91,4 @@ def generate_embedding(paper_abstract):
     with torch.no_grad():
         outputs = model(**tokens)
     return F.normalize(outputs.last_hidden_state[:, 0, :], p=2, dim=1)  # Normalize embedding
+

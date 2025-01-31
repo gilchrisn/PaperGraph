@@ -7,6 +7,7 @@ from compare_paper.similarity_computation import get_similarity
 from paper_repository import PaperRepository
 from util.frontier import Queue, PriorityQueue, Stack
 
+import json
 
 class PaperService:
     def __init__(self):
@@ -64,7 +65,7 @@ class PaperService:
             root_paper["filepath"], ref_paper["filepath"]
         )
         self.repository.insert_reference(
-            root_paper_id, ref_id, relationship_type, remarks, float(similarity_score)
+            root_paper_id, ref_id, relationship_type, json.dumps(remarks), float(similarity_score)
         )
         explored_papers.add(ref_id)
         return similarity_score, relationship_type, remarks
@@ -157,7 +158,7 @@ class PaperService:
                 print("similarity score: " + str(similarity_score))
                 # Store the reference record in DB
                 self.repository.insert_reference(
-                    root_paper_id, parent_id, relationship_type, remarks, float(min(1.0, similarity_score))
+                    root_paper_id, parent_id, relationship_type, json.dumps(remarks), float(min(1.0, similarity_score))
                 )
 
             # If below threshold, mark as explored so we don't revisit
@@ -226,7 +227,7 @@ class PaperService:
                     "title": paper_info["title"],
                     "similarity_score": float(ref_data["similarity_score"]),
                     "relationship_type": ref_data["relationship_type"],
-                    "remarks": ref_data["remarks"],
+                    "remarks": ref_data["remarks"]
                 }
             )
 
@@ -237,9 +238,9 @@ class PaperService:
                 {
                     "id": start_paper_id,
                     "title": current_paper_info["title"],
-                    "similarity_score": 1.0 if start_paper_id == root_paper_id else 0.999,
-                    "relationship_type": None,
-                    "remarks": None,
+                    "similarity_score": current_paper_info["similarity_score"],
+                    "relationship_type": current_paper_info["relationship_type"],
+                    "remarks": current_paper_info["remarks"],
                 }
             )
 
@@ -356,9 +357,9 @@ class PaperService:
                 {
                     "id": start_paper_id,
                     "title": current_paper_info["title"],
-                    "similarity_score": 1.0 if start_paper_id == root_paper_id else 0.999,
-                    "relationship_type": None,
-                    "remarks": None,
+                    "similarity_score": current_paper_info["similarity_score"],
+                    "relationship_type": current_paper_info["relationship_type"],
+                    "remarks": current_paper_info["remarks"],
                 }
             )
 
