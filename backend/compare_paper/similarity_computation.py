@@ -5,17 +5,10 @@ from grobid.grobid_paper_extractor import extract_metadata, extract_all_metadata
 from openai_service.prompt_chatgpt import prompt_chatgpt
 import json
 
-# def get_similarity(paper_1_path, paper_2_path):
-#     paper_1_abstract = extract_metadata(paper_1_path, "processHeaderDocument")["abstract"]
-#     paper_2_abstract = extract_metadata(paper_2_path, "processHeaderDocument")["abstract"]
+# def get_relevance(paper_1_path, paper_2_path):
+#     return 0.89, "baseline", "Paper B is likely a missed baseline for Paper A."
 
-#     embeddings_paper_1 = generate_embedding(paper_1_abstract)
-#     embeddings_paper_2 = generate_embedding(paper_2_abstract)
-
-#     return cosine_similarity(embeddings_paper_1, embeddings_paper_2)[0][0], "citation", "lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua"
-
-
-def get_similarity(paper_1_path, paper_2_path):
+def get_relevance(paper_1_path, paper_2_path):
     paper_1_details = extract_all_metadata(paper_1_path)
     paper_2_details = extract_all_metadata(paper_2_path)
 
@@ -62,7 +55,7 @@ def get_similarity(paper_1_path, paper_2_path):
     - **1** = Slight overlap or weak relevance.
     - **2** = Moderate overlap or relevance.
     - **3** = Strong overlap or direct relevance.
-    4. Provide a brief explanation for the score.
+    4. Provide an explanation for the score, especially for the more important criterions.
 
     ---
 
@@ -116,7 +109,7 @@ def get_similarity(paper_1_path, paper_2_path):
                 "explanation": "[Explanation for the score]"
             }}
         }},
-        "relationship_type": "[baseline/citation]",
+        "relationship_type": "[baseline/not baseline]",
         "conclusion": "[Summarize whether Paper B is likely a missed baseline or citation for Paper A]"
     }}
 
@@ -130,15 +123,24 @@ def get_similarity(paper_1_path, paper_2_path):
         {"role": "user", "content": prompt}
     ]
 
-    response = prompt_chatgpt(messages, model="gpt-4")  
+    response = prompt_chatgpt(messages, model="gpt-4o")  
+    parsed_json_response = parse_json_response(response)
 
-    parsed_response = parse_openai_response(response)
+    parsed_response = parse_openai_response(parsed_json_response)
 
     print("similarity_score:", type(parsed_response["similarity_score"]))
     print("relationship_type:", type(parsed_response["relationship_type"]))
     print("parsed_response:", type(parsed_response))
 
     return parsed_response["similarity_score"], parsed_response["relationship_type"], parsed_response
+
+def parse_json_response(response):
+    cleaned_response = response.strip().strip('```json')
+
+    import json
+    # Parse response into a dictionary
+    response_dict = json.loads(cleaned_response)
+    return response_dict
 
 def parse_openai_response(data):
 
@@ -159,18 +161,10 @@ def parse_openai_response(data):
         total_score += value["relevance_score"] * weights_dict[criterion]
         total_weight += weights_dict[criterion]
 
-    similarity_score = total_score / total_weight
+    similarity_score = total_score / (total_weight * 3)
 
     # Append similarity score to the JSON response
     data["similarity_score"] = similarity_score
 
     return data
 
-
-if __name__ == '__main__':
-    paper_1_path = "resources\\all_papers\\-Stepping_A_Parallel_Single_Source_Shortest_Path_Algorithm.pdf"
-    paper_2_path = "resources\\all_papers\\3-HOP_A_High-Compression_Indexing_Scheme_for_Reachability_Query.pdf"
-
-    similarity_data = get_similarity(paper_1_path, paper_2_path)
-
-    print(similarity_data)

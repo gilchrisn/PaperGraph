@@ -1,6 +1,7 @@
 from fastapi import APIRouter, HTTPException, Query, WebSocket
 from fastapi.responses import FileResponse
 from paper_service import PaperService
+from paper_search.semantic_scholar import search_papers_by_title, process_and_cite_paper
 import os
 
 router = APIRouter()
@@ -27,31 +28,36 @@ def get_all_papers():
 @router.get("/papers/search/", tags=["Papers"])
 def search_paper_by_title(title: str = Query(..., description="Paper title to search")):
     """
-    Retrieve papers by title.
+    Retrieve papers by title from semantic scholar. Return top 5 results.
     """
+    print("Searching for papers with title:", title)
     try:
-        papers = paper_service.search_paper_by_title(title)
+        papers = search_papers_by_title(title, limit=5)
         if not papers:
-            raise HTTPException(status_code=404, detail="Paper not found")
-        return {"papers": papers}
+            raise HTTPException(status_code=404, detail=f"No papers found for title '{title}'")
+        print(papers.keys())
+        return {"papers": papers['data']} if papers['data'] else {"papers": []}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-
-
+    
+    
 # 3. Get a Specific Paper by ID
 @router.get("/papers/{paper_id}", tags=["Papers"])
 def get_paper_by_id(paper_id: str):
     """
-    Retrieve a specific paper by its ID.
+    Retrieve a specific paper by its ID. If paper doesn't exist, use download_paper_and_create_record method, then return the paper.
     """
     try:
         paper = paper_service.get_paper_by_id(paper_id)
         if not paper:
-            raise HTTPException(status_code=404, detail=f"Paper with ID '{paper_id}' not found")
+            # Download the paper and create a record in the database
+            paper_service.download_paper_and_create_record(paper_id)
+            paper = paper_service.get_paper_by_id(paper_id)
+            if not paper:
+                raise HTTPException(status_code=404, detail=f"Paper with ID '{paper_id}' not found")
         return {"paper": paper}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-
 
 # 4. Exploration Method
 @router.websocket("/papers/{paper_id}/explore/")
@@ -94,7 +100,7 @@ def fetch_pdf(paper_id: str):
     Retrieve the PDF file for a specific paper.
     """
     try:
-        file_path = paper_service.get_pdf_path(paper_id)
+        file_path = paper_service.get_pdf_path(paper_id) 
         if not os.path.exists(file_path):
             raise HTTPException(status_code=404, detail="PDF file not found")
         return FileResponse(

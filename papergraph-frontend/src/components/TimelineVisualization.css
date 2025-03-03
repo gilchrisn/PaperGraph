@@ -1,0 +1,37 @@
+.timeline-container {
+    display: flex;
+    align-items: center;
+    overflow-x: auto;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f5f5f5;
+  }
+  
+  .timeline-node {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 20px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+  }
+  
+  .timeline-node:hover {
+    transform: scale(1.05);
+  }
+  
+  .timeline-node-circle {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: #377eb8; /* Change as needed */
+    margin-bottom: 5px;
+  }
+  
+  .timeline-node-label {
+    font-size: 12px;
+    text-align: center;
+    white-space: nowrap;
+  }
+  

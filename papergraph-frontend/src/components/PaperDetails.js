@@ -11,10 +11,13 @@ const PaperDetails = ({ paper }) => {
                 <strong>ID:</strong> {paper.id}
             </p>
             <p>
-                <strong>Similarity Score:</strong> {paper.similarity_score.toFixed(2)}
+                <strong>Relevance Score:</strong> {paper.relevance_score.toFixed(2)}
             </p>
             <p>
                 <strong>Relationship Type:</strong> {paper.relationship_type}
+            </p>
+            <p>
+                <strong>Year:</strong> {paper.year}
             </p>
             <button
                 onClick={() => setShowRemarks(true)}

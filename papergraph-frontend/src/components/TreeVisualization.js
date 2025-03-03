@@ -10,7 +10,8 @@ const TreeVisualization = ({
   upwardData,
   width = 800,
   height = 600,
-  similarityThreshold = 0
+  similarityThreshold = 0,
+  viewMode = "combined",
 }) => {
   const svgRef = useRef();
   const tooltipRef = useRef();
@@ -18,13 +19,64 @@ const TreeVisualization = ({
   // Colors for edges and nodes
   const COLORS = {
     downward: "#4d8f4a", // green
-    upward:   "#377eb8", // blue
-    root:     "#e41a1c", // red
+    upward: "#377eb8", // blue
+    root: "#e41a1c", // red
     nodeDefault: "#69b3a2",
     text: "#333",
     background: "#f5f5f5"
   };
 
+  /**
+ * Takes the 'master' graph (the BFS result with positions)
+ * and filters the nodes/links based on the viewMode.
+ */
+  const filterByViewMode = (allNodes, allLinks) => {
+    if (viewMode === "downward") {
+      // Only show the downwardData set
+      const downLinksSet = new Set(
+        (downwardData.links || []).map((l) => `${l.source}-${l.target}`)
+      );
+      // Filter nodes that appear in downwardData
+      const downNodeIds = new Set((downwardData.nodes || []).map((n) => n.id));
+
+      const filteredNodes = allNodes.filter((n) => downNodeIds.has(n.id));
+      const filteredLinks = allLinks.filter((l) =>
+        downLinksSet.has(`${l.source}-${l.target}`)
+      );
+      return { nodes: filteredNodes, links: filteredLinks };
+
+    } else if (viewMode === "upward") {
+      // Only show the upwardData set
+      const upLinksSet = new Set(
+        (upwardData.links || []).map((l) => `${l.source}-${l.target}`)
+      );
+      const upNodeIds = new Set((upwardData.nodes || []).map((n) => n.id));
+
+      const filteredNodes = allNodes.filter((n) => upNodeIds.has(n.id));
+      const filteredLinks = allLinks.filter((l) =>
+        upLinksSet.has(`${l.source}-${l.target}`)
+      );
+      return { nodes: filteredNodes, links: filteredLinks };
+
+    } else if (viewMode === "threshold") {
+      // Only show nodes with similarity > threshold
+      const validIds = new Set(
+        allNodes
+          .filter((n) => (n.relevance_score || 0) > similarityThreshold)
+          .map((n) => n.id)
+      );
+
+      const filteredNodes = allNodes.filter((n) => validIds.has(n.id));
+      const filteredLinks = allLinks.filter(
+        (l) => validIds.has(l.source) && validIds.has(l.target)
+      );
+      return { nodes: filteredNodes, links: filteredLinks };
+
+    } else {
+      // "combined" => show everything
+      return { nodes: allNodes, links: allLinks };
+    }
+  };
   //////////////////////////////////////////////////////////
   // 1) Classify links as downward/upward from data
   //////////////////////////////////////////////////////////
@@ -205,6 +257,12 @@ const TreeVisualization = ({
       height
     );
 
+    // Filter based on viewMode
+    const { nodes: finalNodes, links: finalLinks } = filterByViewMode(
+      displayedNodes,
+      displayedLinks
+    );
+
     const svg = d3.select(svgRef.current);
     svg.selectAll("*").remove();
 
@@ -222,14 +280,14 @@ const TreeVisualization = ({
 
     // Build a map for quick node lookups
     const nodeMap = {};
-    displayedNodes.forEach((n) => {
+    finalNodes.forEach((n) => {
       nodeMap[n.id] = n;
     });
 
     // Edges
     zoomG
       .selectAll(".link")
-      .data(displayedLinks)
+      .data(finalLinks)
       .join("line")
       .attr("class", "link")
       .attr("x1", (d) => positions[d.source].x)
@@ -238,7 +296,7 @@ const TreeVisualization = ({
       .attr("y2", (d) => positions[d.target].y)
       .attr("stroke", (d) => {
         const targetNode = nodeMap[d.target];
-        const score = targetNode?.similarity_score || 0;
+        const score = targetNode?.relevance_score || 0;
         const baseColor = d.type === "downward" ? COLORS.downward : COLORS.upward;
         return score > similarityThreshold
           ? d3.color(baseColor).brighter(0.5)
@@ -246,13 +304,13 @@ const TreeVisualization = ({
       })
       .attr("stroke-width", (d) => {
         const targetNode = nodeMap[d.target];
-        return (targetNode?.similarity_score || 0) > similarityThreshold ? 3 : 1;
+        return (targetNode?.relevance_score || 0) > similarityThreshold ? 3 : 1;
       });
 
     // Nodes
     const nodeGroups = zoomG
       .selectAll(".node")
-      .data(displayedNodes)
+      .data(finalNodes)
       .join("g")
       .attr("class", "node")
       .attr("transform", (d) => {
@@ -260,7 +318,7 @@ const TreeVisualization = ({
         return `translate(${x},${y})`;
       })
       // Dim nodes below threshold
-      .attr("opacity", (d) => ((d.similarity_score || 0) > similarityThreshold ? 1 : 0.5))
+      .attr("opacity", (d) => ((d.relevance_score || 0) > similarityThreshold ? 1 : 0.5))
       .on("click", (event, d) => {
         event.stopPropagation();
         onNodeClick?.(d);
@@ -273,23 +331,23 @@ const TreeVisualization = ({
       .on("mouseout", function () {
         d3.select(this)
           .select("circle")
-          .attr("r", (d) => ((d.similarity_score || 0) > similarityThreshold ? 14 : 5));
+          .attr("r", (d) => ((d.relevance_score || 0) > similarityThreshold ? 14 : 5));
         hideTooltip();
       });
 
     nodeGroups
       .append("circle")
-      .attr("r", (d) => ((d.similarity_score || 0) > similarityThreshold ? 14 : 5))
+      .attr("r", (d) => ((d.relevance_score || 0) > similarityThreshold ? 14 : 5))
       .attr("fill", (d) => {
         const baseColor = d.id === rootId ? COLORS.root : COLORS.nodeDefault;
-        return (d.similarity_score || 0) > similarityThreshold
+        return (d.relevance_score || 0) > similarityThreshold
           ? d3.color(baseColor).brighter(0.3)
           : baseColor;
       });
 
     // Only render text for high-similarity nodes
     nodeGroups
-      .filter((d) => (d.similarity_score || 0) > similarityThreshold)
+      .filter((d) => (d.relevance_score || 0) > similarityThreshold)
       .append("text")
       .attr("text-anchor", "middle")
       .attr("dy", -18)
@@ -344,7 +402,7 @@ const TreeVisualization = ({
       .style("top", `${event.pageY + 12}px`)
       .html(`
         <strong>${node.title ?? node.id}</strong><br/>
-        Similarity: ${node.similarity_score?.toFixed(2) ?? "N/A"}<br/>
+        Similarity: ${node.relevance_score?.toFixed(2) ?? "N/A"}<br/>
         ${node.remarks ? `Remarks: ${node.remarks}` : ""}
       `);
   };
@@ -412,7 +470,8 @@ TreeVisualization.propTypes = {
   onNodeClick: PropTypes.func,
   width: PropTypes.number,
   height: PropTypes.number,
-  similarityThreshold: PropTypes.number
+  similarityThreshold: PropTypes.number,
+  viewMode: PropTypes.string,
 };
 
 export default TreeVisualization;

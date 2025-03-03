@@ -25,9 +25,17 @@ const PaperDetails = () => {
     return (
         <div>
             <h1>{paper.title}</h1>
-            <p><strong>Authors:</strong> {paper.authors.join(", ")}</p>
+            <p>
+                <strong>ID:</strong> {paper.semantic_id}
+            </p>
+            <p>
+                <strong>Year:</strong> {paper.year}
+            </p>
+            <p>
+                <strong>Venue:</strong> {paper.venue}
+            </p>
             <a
-                href={`http://localhost:8000/papers/${encodeURIComponent(paper.id)}/pdf`}
+                href={`${paper.open_access_pdf}`}
                 target="_blank"
                 rel="noopener noreferrer"
             >

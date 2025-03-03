@@ -4,6 +4,9 @@ import { createWebSocket } from "../utils/websocket";
 import PaperDetails from "../components/PaperDetails";
 import TreeVisualization from "../components/TreeVisualization"; // <-- Changed
 import PropTypes from "prop-types";
+import TimelineVisualization from "../components/TimelineVisualization";
+import GraphVisualization from "../components/GraphVisualization";
+
 
 /**
  * EXPLORE PAPER COMPONENT
@@ -25,29 +28,32 @@ const ExplorePaper = () => {
   });
 
   // UI States
+  const [layoutType, setLayoutType] = useState("tree");
   const [selectedPaper, setSelectedPaper] = useState(null);
   const [similarNodes, setSimilarNodes] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [viewMode, setViewMode] = useState("combined");
 
   // Exploration Parameters
-  const [params, setParams] = useState({
-    maxDepth: 5,
-    similarityThreshold: 0.88,
-    traversalType: "bfs"
+  const [explorationParams, setExplorationParams] = useState({
+    maxDepth: 2,
+    similarityThreshold: 0.8,
+    traversalType: "bfs",
   });
 
   // Temporary form state
-  const [draftParams, setDraftParams] = useState({ ...params });
+  const [draftExplorationParams, setDraftExplorationParams] = useState({ ...explorationParams });
 
   // Update similar papers when graph or threshold changes
   useEffect(() => {
-    const threshold = params.similarityThreshold;
+    const threshold = explorationParams.similarityThreshold;
     const filtered = graph.nodes.filter(
-      (node) => node.similarity_score >= threshold && node.id !== paperId
+      (node) => node.relevance_score >= threshold && node.id !== paperId
     );
-    setSimilarNodes(filtered.sort((a, b) => b.similarity_score - a.similarity_score));
-  }, [graph, params.similarityThreshold, paperId]);
+    
+    setSimilarNodes(filtered.sort((a, b) => b.relevance_score - a.relevance_score));
+  }, [graph, explorationParams.similarityThreshold, paperId]);
 
   // WebSocket management
   useEffect(() => {
@@ -105,9 +111,9 @@ const ExplorePaper = () => {
     const socket = createWebSocket(
       paperId,
       handleWebSocketMessage,
-      params.maxDepth,
-      params.similarityThreshold,
-      params.traversalType
+      explorationParams.maxDepth,
+      explorationParams.similarityThreshold,
+      explorationParams.traversalType
     );
 
     socket.onopen = () => setIsLoading(false);
@@ -120,7 +126,7 @@ const ExplorePaper = () => {
         console.log("WWHY CLOSEEEE");
         socket.close();
       };
-  }, [paperId, params]);
+  }, [paperId, explorationParams]);
 
   // Handle parameter changes with validation
   const handleParamChange = (field, value) => {
@@ -130,15 +136,15 @@ const ExplorePaper = () => {
       processedValue = Math.min(1, Math.max(0, Number(value)));
     }
 
-    setDraftParams((prev) => ({ ...prev, [field]: processedValue }));
+    setDraftExplorationParams((prev) => ({ ...prev, [field]: processedValue }));
   };
 
   const applyNewParams = () => {
-    if (draftParams.similarityThreshold > 1 || draftParams.similarityThreshold < 0) {
+    if (draftExplorationParams.similarityThreshold > 1 || draftExplorationParams.similarityThreshold < 0) {
       setError("Similarity must be between 0 and 1");
       return;
     }
-    setParams({ ...draftParams });
+    setExplorationParams({ ...draftExplorationParams });
   };
 
   // RENDERING
@@ -152,6 +158,17 @@ const ExplorePaper = () => {
         {/* Visualization Panel */}
         <section className="visualization-panel">
           <h1>Exploring Connections for Paper: {paperId}</h1>
+          {/* Layout selection */}
+         <div>
+           <label>Layout Type: </label>
+          <select value={layoutType} onChange={(e) => setLayoutType(e.target.value)}>
+            <option value="tree">Tree Layout</option>
+             <option value="graph">Force Graph Layout</option>
+           </select>
+         </div>
+
+         {/* Conditionally render either Tree or Graph */}
+         {layoutType === "tree" ? (
 
           <TreeVisualization
             graph={graph}
@@ -161,8 +178,38 @@ const ExplorePaper = () => {
             upwardData={graphPhases.upward}
             width={1600}
             height={600}
-            similarityThreshold={params.similarityThreshold}
+            similarityThreshold={explorationParams.similarityThreshold}
+            viewMode={viewMode} 
           />
+        ) : (
+                     <GraphVisualization
+                       graph={graph}
+                       rootId={paperId}
+                       onNodeClick={setSelectedPaper}
+                       downwardData={graphPhases.downward}
+                       upwardData={graphPhases.upward}
+                       width={1600}
+                       height={600}
+                       similarityThreshold={explorationParams.similarityThreshold}
+                       viewMode={viewMode}
+                     />
+                    )}
+
+          {/* Controls */}
+          <div className="parameter-controls">
+            <label>
+              View Mode:
+              <select
+                value={viewMode || "combined"}
+                onChange={(e) => setViewMode(e.target.value)}
+              >
+                <option value="combined">Combined (Up + Down)</option>
+                <option value="downward">Downward Only</option>
+                <option value="upward">Upward Only</option>
+                <option value="threshold">Score > Threshold</option>
+              </select>
+            </label>
+          </div>
 
           {/* Parameter Controls */}
           <div className="parameter-controls">
@@ -173,7 +220,7 @@ const ExplorePaper = () => {
                 <input
                   type="number"
                   step="0.01"
-                  value={draftParams.similarityThreshold}
+                  value={draftExplorationParams.similarityThreshold}
                   onChange={(e) => handleParamChange("similarityThreshold", e.target.value)}
                   min="0"
                   max="1"
@@ -186,7 +233,7 @@ const ExplorePaper = () => {
                 Search Depth:
                 <input
                   type="number"
-                  value={draftParams.maxDepth}
+                  value={draftExplorationParams.maxDepth}
                   onChange={(e) => handleParamChange("maxDepth", e.target.value)}
                   min="1"
                   max="10"
@@ -198,7 +245,7 @@ const ExplorePaper = () => {
               <label>
                 Exploration Method:
                 <select
-                  value={draftParams.traversalType}
+                  value={draftExplorationParams.traversalType}
                   onChange={(e) => handleParamChange("traversalType", e.target.value)}
                 >
                   <option value="bfs">Breadth-First Search</option>
@@ -226,18 +273,25 @@ const ExplorePaper = () => {
                   className="paper-item"
                 >
                   <span className="paper-title">{node.title}</span>
-                  <span className="similarity-score">
-                    {node.similarity_score.toFixed(2)}
+                  <span className="relevance-score">
+                    {node.relevance_score.toFixed(2)}
                   </span>
                 </li>
               ))}
             </ul>
           ) : (
             <p className="empty-state">
-              No papers meet the similarity threshold ({params.similarityThreshold})
+              No papers meet the similarity threshold ({explorationParams.similarityThreshold})
             </p>
           )}
         </section>
+
+        {/* Timeline Visualization */}
+        <section className="timeline-visualization">
+          <h2>Timeline of Similar Papers</h2>
+          <TimelineVisualization nodes={similarNodes} onNodeClick={setSelectedPaper} />
+        </section>
+
 
         {/* Paper Details Sidebar */}
         <section className="details-sidebar">
