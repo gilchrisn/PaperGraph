@@ -5,11 +5,13 @@ import os
 from fastapi import HTTPException, WebSocket
 
 # Example imports; adjust to match your code
-from compare_paper.similarity_computation import get_relevance
+from paper_comparison import generate_embedding_for_paper_chunks, compare_two_papers
 
 # Import your PaperRepository, which handles the DB logic
 from paper_repository import PaperRepository
 from util.frontier import Queue, PriorityQueue, Stack
+
+
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)  # Adjust as needed
@@ -18,7 +20,7 @@ class PaperService:
     def __init__(self):
         self.repository = PaperRepository()  # Ensure your repository class is properly initialized
 
-    def download_paper_and_create_record(self, paper_id: str, api_key: str = None):
+    def download_paper_and_create_record(self, paper_id: str):
         """
         Download the paper using the Semantic Scholar API and create a record in the database.
         """
@@ -93,8 +95,6 @@ class PaperService:
                 relation = {
                     "source_paper_id": source_paper_id,
                     "target_paper_id": target_paper_id,
-                    "relationship_type": None,
-                    "remarks": None,
                     "relevance_score": None,
                 }
                 self.repository.create_relation(relation)
@@ -121,42 +121,38 @@ class PaperService:
             target_paper_resp = self.repository.get_paper_by_semantic_id(target_paper_id)
             if not target_paper_resp:
                 logger.error(f"Paper with ID {target_paper_id} not found")
-                return 0.0, None, None
+                return 0.0
 
             # Check or create the relation row
             relation = self.fetch_or_insert_relation(root_paper_id, target_paper_id)
             if not relation:
                 logger.warning(f"Relation row could not be created for {root_paper_id} -> {target_paper_id}")
-                return 0.0, None, None
+                return 0.0
 
             if relation.get("relevance_score") is not None:
                 # Already computed
-                return (
-                    relation["relevance_score"],
-                    relation.get("relationship_type"),
-                    relation.get("remarks"),
-                )
+                return relation["relevance_score"]
+                
 
-            # Need to compute relevance_score
-            root_path = self.get_pdf_path(root_paper_id)
-            target_path = self.get_pdf_path(target_paper_id)
-            if not root_path or not target_path:
-                logger.warning(f"Missing PDF path for either {root_paper_id} or {target_paper_id}")
-                return 0.0, None, None
+            # Generate embeddings for the papers and compare
+            # Check whether the embeddings are already computed
+            # Assume that having the chunks in the DB implies the embeddings are also present
+            if not self.repository.get_chunks_by_semantic_id(root_paper_id):
+                generate_embedding_for_paper_chunks(root_paper_id)
+            if not self.repository.get_chunks_by_semantic_id(target_paper_id):
+                generate_embedding_for_paper_chunks(target_paper_id)
 
-            relevance_score, relationship_type, remarks = get_relevance(root_path, target_path)
-
+            relevance_score = compare_two_papers(root_paper_id, target_paper_id)
+            
             # Update the relation row
             updated_fields = {
-                "relationship_type": relationship_type,
-                "remarks": json.dumps(remarks),
                 "relevance_score": relevance_score,
             }
             self.repository.update_relation_by_source_and_target(
                 root_paper_id, target_paper_id, updated_fields
             )
 
-            return relevance_score, relationship_type, remarks
+            return relevance_score
         except Exception as e:
             logger.exception("Error processing citation")
             raise HTTPException(status_code=500, detail=str(e))
@@ -189,7 +185,7 @@ class PaperService:
                 if target_id in explored_papers:
                     continue
 
-                relevance_score, relationship_type, remarks = self.process_citation(root_paper_id, target_id)
+                relevance_score = self.process_citation(root_paper_id, target_id)
                 if relevance_score < similarity_threshold:
                     # Mark as explored to skip in future
                     explored_papers.add(target_id)
@@ -197,8 +193,6 @@ class PaperService:
 
                 filtered_citations[target_id] = {
                     "relevance_score": relevance_score,
-                    "relationship_type": relationship_type,
-                    "remarks": remarks,
                 }
 
             return filtered_citations
@@ -228,15 +222,13 @@ class PaperService:
                     continue
 
                 # Compute or retrieve the relevance_score for root_paper_id -> parent_id
-                relevance_score, relationship_type, remarks = self.process_citation(root_paper_id, parent_id)
+                relevance_score = self.process_citation(root_paper_id, parent_id)
                 if relevance_score < similarity_threshold:
                     explored_papers.add(parent_id)
                     continue
 
                 parents_dict[parent_id] = {
                     "relevance_score": relevance_score,
-                    "relationship_type": relationship_type,
-                    "remarks": remarks,
                 }
 
             return parents_dict
@@ -290,8 +282,6 @@ class PaperService:
                     "title": ref_paper.get("title"),
                     "year": ref_paper.get("year"),
                     "relevance_score": ref_data.get("relevance_score"),
-                    "relationship_type": ref_data.get("relationship_type"),
-                    "remarks": ref_data.get("remarks"),
                 })
 
             # Also include the current paper node
@@ -303,9 +293,7 @@ class PaperService:
                     "id": start_paper_id,
                     "title": current_paper.get("title"),
                     "year": current_paper.get("year"),
-                    "relevance_score": None,  # or some stored value
-                    "relationship_type": None,
-                    "remarks": None,
+                    "relevance_score": current_paper.get("relevance_score"),
                 })
 
             # Build links from the current paper to each reference
@@ -394,12 +382,10 @@ class PaperService:
                     "title": parent_paper.get("title"),
                     "year": parent_paper.get("year"),
                     "relevance_score": parent_data.get("relevance_score"),
-                    "relationship_type": parent_data.get("relationship_type"),
-                    "remarks": parent_data.get("remarks"),
                 })
 
             # Create links from each parent to the current paper
-            links = [{"source": parent_id, "target": start_paper_id} for parent_id in parents_dict.keys]
+            links = [{"source": parent_id, "target": start_paper_id} for parent_id in parents_dict.keys()]
 
             # Also include the current paper node
             current_paper_resp = self.repository.get_paper_by_semantic_id(start_paper_id)
@@ -409,9 +395,7 @@ class PaperService:
                     "id": start_paper_id,
                     "title": current_paper.get("title"),
                     "year": current_paper.get("year"),
-                    "relevance_score": None,
-                    "relationship_type": None,
-                    "remarks": None,
+                    "relevance_score": current_paper.get("relevance_score"),
                 })
 
             if nodes or links:
@@ -551,6 +535,11 @@ class PaperService:
             logger.exception("Error during paper exploration")
             await websocket.send_json({"status": "error", "message": str(e)})
             return {}
+        
+
+
+# =======================================================================================================
+
 
 if __name__ == "__main__":
     # Example usage
@@ -569,3 +558,6 @@ if __name__ == "__main__":
         traversal_type="bfs"
     )
     print(result)
+
+
+

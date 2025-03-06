@@ -60,6 +60,7 @@ def extract_filtered_sections_from_tei(tei_xml, keywords=HEAD_KEYWORDS):
     Returns:
         dict: A dictionary with filtered section titles as keys and full <div> content as values.
     """
+    print(tei_xml)
     soup = BeautifulSoup(tei_xml, "xml")
     filtered_sections = {}
 
@@ -71,6 +72,53 @@ def extract_filtered_sections_from_tei(tei_xml, keywords=HEAD_KEYWORDS):
                 filtered_sections[title] = div.text.strip()
 
     return filtered_sections
+
+from bs4 import BeautifulSoup
+
+MIN_CHAR_LENGTH = 100  # Minimum length of content to keep a section
+
+def extract_all_sections_from_tei(tei_xml):
+    """
+    Extracts all sections (titles and content) from the TEI XML.
+    Filters out sections with very short content and merges them with the previous section when necessary.
+
+    Parameters:
+        tei_xml (str): The TEI XML content as a string.
+
+    Returns:
+        dict: A dictionary with section titles as keys and the full <div> content as values.
+    """
+    soup = BeautifulSoup(tei_xml, "xml")
+    sections = {}
+    previous_title = None  # Track the last valid section
+
+    for div in soup.find_all("div", xmlns="http://www.tei-c.org/ns/1.0"):
+        head = div.find("head")
+        if head and head.text.strip():
+            title = head.text.strip()
+            content = div.text.strip().replace(title, "", 1).strip()  # Remove title from content
+            
+            if len(content) >= MIN_CHAR_LENGTH:
+                sections[title] = content
+                previous_title = title  # Update previous valid section
+            elif previous_title:
+                # If content is too short, append it to the previous section
+                sections[previous_title] += f"\n\n{title}: {content}"
+
+    return sections
+
+def extract_all_sections(pdf_path):
+    """
+        Extract all sections from a PDF.
+    """
+    tei_xml = extract_tei_from_pdf(pdf_path)
+    if tei_xml:
+        return extract_all_sections_from_tei(tei_xml)
+    return None
+
+
+    
+    
 
 def extract_metadata(pdf_path, metadata_type):
     """
@@ -159,27 +207,14 @@ def extract_all_metadata(pdf_path):
 
 # Example usage
 if __name__ == "__main__":
-    pdf_path = "resources/papers/A Compiler for Throughput Optimization of Graph Algorithms on GPUs.pdf"
+    pdf_path = "paper_preprocessing/2307.08691.pdf"
 
-    if not os.path.exists(pdf_path):
-        print(f"PDF file not found at: {pdf_path}")
-    else:
-        # Extract TEI XML
-        tei_xml = extract_tei_from_pdf(pdf_path)
 
-        if tei_xml:
-            # Extract filtered sections
-            filtered_sections = extract_filtered_sections_from_tei(tei_xml, HEAD_KEYWORDS)
 
-        # Extract title and abstract
-        metadata = extract_metadata(pdf_path, "processHeaderDocument")
-        title = metadata["title"] if metadata else "Title extraction failed."
-        abstract = metadata["abstract"] if metadata else "Abstract extraction failed."
+    # Try extracting all sections
+    full_tei_xml = extract_tei_from_pdf(pdf_path)
+    print("=== Extracting All Sections ===")
+    result = extract_all_sections_from_tei(full_tei_xml)
 
-        # Extract reference titles
-        references = extract_metadata(pdf_path, "processReferences") or []
-
-        # Format and print the extracted data
-        formatted_output = format_extracted_data(title, abstract, references, filtered_sections)
-        print("\nFormatted Extracted Data:\n")
-        print(formatted_output)
+    for title, content in result.items():
+        print(f"\n{title}:\n{content}")

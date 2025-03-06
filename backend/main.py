@@ -19,7 +19,7 @@ app.add_middleware(
 )
 
 # Mount the directory with PDFs as a static file route
-pdf_directory = os.path.join(os.getcwd(), "resources", "all_papers")
+pdf_directory = os.path.join(os.getcwd(), "downloaded_papers")
 app.mount("/pdfs", StaticFiles(directory=pdf_directory), name="pdfs")
 
 # Include the routes

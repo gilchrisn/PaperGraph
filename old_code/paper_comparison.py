@@ -1,12 +1,3 @@
-# similarity_computation.py
-from sklearn.metrics.pairwise import cosine_similarity
-# from compare_paper.paper_embedding import generate_embedding
-from grobid.grobid_paper_extractor import extract_metadata, extract_all_metadata
-from openai_service.prompt_chatgpt import prompt_chatgpt
-import json
-
-# def get_relevance(paper_1_path, paper_2_path):
-#     return 0.89, "baseline", "Paper B is likely a missed baseline for Paper A."
 
 def get_relevance(paper_1_path, paper_2_path):
     paper_1_details = extract_all_metadata(paper_1_path)
@@ -167,4 +158,6 @@ def parse_openai_response(data):
     data["similarity_score"] = similarity_score
 
     return data
+
+
 

@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException, Query, WebSocket
 from fastapi.responses import FileResponse
 from paper_service import PaperService
-from paper_search.semantic_scholar import search_papers_by_title, process_and_cite_paper
+from paper_search.semantic_scholar import search_papers_by_title
 import os
 
 router = APIRouter()

@@ -295,3 +295,55 @@ class PaperRepository:
         except Exception as e:
             logger.error(f"Error processing paper {start_paper_id}: {e}")
             raise
+
+    def get_paper_summary_by_semantic_id(self, semantic_id: str) -> dict:
+        """
+        Retrieve the summary columns for a given paper.
+        """
+
+        try:
+            response = self.client.table("papers").select("summary").eq("semantic_id", semantic_id).execute()
+            logger.info(f"Retrieved paper summary for {semantic_id}")
+            return response.data[0] if response.data else None
+        except Exception as e:
+            logger.error(f"Error getting paper summary for {semantic_id}: {e}")
+            raise
+
+    def get_chunks_by_semantic_id(self, semantic_id: str) -> dict:
+        """
+        Retrieve all chunks for a given paper.
+        """
+
+        try:
+            response = self.client.table("paper_chunks").select("*").eq("semantic_id", semantic_id).execute()
+            logger.info(f"Retrieved chunks for paper {semantic_id}")
+            return response.data
+        except Exception as e:
+            logger.error(f"Error getting chunks for paper {semantic_id}: {e}")
+            raise
+    
+    def create_chunk(self, chunk: dict) -> dict:
+        """
+        Insert a new chunk record into the paper_chunks table.
+        Expected keys: semantic_id, section_title, chunk_text.
+        """
+        try:
+            response = self.client.table("paper_chunks").insert(chunk).execute()
+            logger.info(f"Created chunk for paper {chunk.get('semantic_id')}")
+            return response.data[0] if response.data else None
+        except Exception as e:
+            logger.error(f"Error creating chunk: {e}")
+            raise
+
+    def create_paper_comparison(self, paper_comparison: dict) -> dict:
+        """
+        Insert a new paper comparison record into the paper_comparisons table.
+        Expected keys: semantic_id, comparison.
+        """
+        try:
+            response = self.client.table("paper_comparisons").insert(paper_comparison).execute()
+            logger.info(f"Created comparison for paper")
+            return response.data[0] if response.data else None
+        except Exception as e:
+            logger.error(f"Error creating comparison: {e}")
+            raise
