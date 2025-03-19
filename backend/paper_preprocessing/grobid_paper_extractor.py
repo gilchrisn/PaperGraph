@@ -111,6 +111,8 @@ def extract_all_sections(pdf_path):
     """
         Extract all sections from a PDF.
     """
+    print("\n" * 10)
+    print(pdf_path)
     tei_xml = extract_tei_from_pdf(pdf_path)
     if tei_xml:
         return extract_all_sections_from_tei(tei_xml)
@@ -189,7 +191,7 @@ def extract_all_metadata(pdf_path):
     """
     # Extract TEI XML
     tei_xml = extract_tei_from_pdf(pdf_path)
-
+    
     if tei_xml:
         # Extract filtered sections
         filtered_sections = extract_filtered_sections_from_tei(tei_xml, HEAD_KEYWORDS)
@@ -207,14 +209,8 @@ def extract_all_metadata(pdf_path):
 
 # Example usage
 if __name__ == "__main__":
-    pdf_path = "paper_preprocessing/2307.08691.pdf"
+    pdf_path = "sans.pdf"
 
-
-
-    # Try extracting all sections
-    full_tei_xml = extract_tei_from_pdf(pdf_path)
-    print("=== Extracting All Sections ===")
-    result = extract_all_sections_from_tei(full_tei_xml)
-
-    for title, content in result.items():
-        print(f"\n{title}:\n{content}")
+    # Extract all references
+    metadata = extract_metadata(pdf_path, "processReferences")
+    print(metadata)

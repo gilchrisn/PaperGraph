@@ -6,6 +6,15 @@ from PyPDF2 import PdfReader
 
 logger = logging.getLogger(__name__)
 
+from supabase import Client, create_client
+
+SUPABASE_URL = os.getenv("SUPABASE_URL", "https://your-supabase-url.supabase.co")
+SUPABASE_KEY = os.getenv("SUPABASE_KEY", "your-supabase-api-key")
+supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
+
+
+
+
 SEMANTIC_SCHOLAR_BASE_URL = "https://api.semanticscholar.org/graph/v1/paper/"
 SEMANTIC_SCHOLAR_API_KEY = os.getenv("SEMANTIC_SCHOLAR_API_KEY", None)
 
@@ -333,3 +342,15 @@ def process_and_cite_paper(paper_id: str, db_client, api_key = SEMANTIC_SCHOLAR_
                 logger.error(f"Error checking for referenced paper {ref_id}: {e}")
 
             time.sleep(0.5)  # Respect rate limits
+
+
+
+
+if __name__ == "__main__":
+    
+
+    # Search papers by title, 
+
+    # Download them and save in database
+
+    pass

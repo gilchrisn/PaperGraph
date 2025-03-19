@@ -28,3 +28,4 @@ app.include_router(router)
 @app.get("/", tags=["Root"])
 def read_root():
     return {"message": "Welcome to the Research Paper API!"}
+

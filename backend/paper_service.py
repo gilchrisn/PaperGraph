@@ -5,7 +5,7 @@ import os
 from fastapi import HTTPException, WebSocket
 
 # Example imports; adjust to match your code
-from paper_comparison import generate_embedding_for_paper_chunks, compare_two_papers
+from paper_comparison import generate_embedding_for_paper_chunks, compare_two_papers, create_comparison_table
 
 # Import your PaperRepository, which handles the DB logic
 from paper_repository import PaperRepository
@@ -119,12 +119,16 @@ class PaperService:
         try:
             # Make sure the target paper exists in the 'papers' table
             target_paper_resp = self.repository.get_paper_by_semantic_id(target_paper_id)
+            print("\n" * 5)
+            print("checkpoint 0")
             if not target_paper_resp:
                 logger.error(f"Paper with ID {target_paper_id} not found")
                 return 0.0
 
             # Check or create the relation row
+            print("checkpoint 1")
             relation = self.fetch_or_insert_relation(root_paper_id, target_paper_id)
+            print("checkpoint 2")
             if not relation:
                 logger.warning(f"Relation row could not be created for {root_paper_id} -> {target_paper_id}")
                 return 0.0
@@ -133,7 +137,6 @@ class PaperService:
                 # Already computed
                 return relation["relevance_score"]
                 
-
             # Generate embeddings for the papers and compare
             # Check whether the embeddings are already computed
             # Assume that having the chunks in the DB implies the embeddings are also present
@@ -190,7 +193,7 @@ class PaperService:
                     # Mark as explored to skip in future
                     explored_papers.add(target_id)
                     continue
-
+                
                 filtered_citations[target_id] = {
                     "relevance_score": relevance_score,
                 }
@@ -540,6 +543,15 @@ class PaperService:
 
 # =======================================================================================================
 
+def get_comparison_table(root_paper_id: str, compared_paper_ids: list):
+    """
+    Generate a comparison table for the root paper and a list of compared papers.
+    """
+
+    comparison_table = create_comparison_table(root_paper_id, compared_paper_ids)
+
+    # check if all compared papers are in the comparison table 
+    # For each compared paper that is not in the comparison table, add it
 
 if __name__ == "__main__":
     # Example usage

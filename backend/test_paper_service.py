@@ -21,10 +21,10 @@ async def test_explore_paper():
     # Call the asynchronous explore_paper method
     result = await paper_service.explore_paper(
         websocket=ws,
-        root_paper_id="204e3073870fae3d05bcbc2f6a8e263d9b72e776",
-        start_paper_id="204e3073870fae3d05bcbc2f6a8e263d9b72e776",
-        max_depth=2,
-        similarity_threshold=0.88,
+        root_paper_id="manual1",
+        start_paper_id="manual1",
+        max_depth=1,
+        similarity_threshold=0.7,
         traversal_type="bfs"
     )
     

@@ -347,3 +347,16 @@ class PaperRepository:
         except Exception as e:
             logger.error(f"Error creating comparison: {e}")
             raise
+
+    def get_paper_comparison_by_semantic_id(self, semantic_id: str) -> dict:
+        """
+        Retrieve the comparison columns for a given paper.
+        """
+
+        try:
+            response = self.client.table("paper_comparisons").select("comparison_data").eq("semantic_id", semantic_id).execute()
+            logger.info(f"Retrieved paper comparison for {semantic_id}")
+            return response.data[0] if response.data else None
+        except Exception as e:
+            logger.error(f"Error getting paper comparison for {semantic_id}: {e}")
+            raise
