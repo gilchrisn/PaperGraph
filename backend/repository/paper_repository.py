@@ -296,13 +296,13 @@ class PaperRepository:
             logger.error(f"Error processing paper {start_paper_id}: {e}")
             raise
 
-    def get_paper_summary_by_semantic_id(self, semantic_id: str) -> dict:
+    def get_paper_summary_by_semantic_id(self, semantic_id: str, strategy: str) -> dict:
         """
         Retrieve the summary columns for a given paper.
         """
 
         try:
-            response = self.client.table("papers").select("summary").eq("semantic_id", semantic_id).execute()
+            response = self.client.table("papers").select("summary").eq("semantic_id", semantic_id).eq("strategy", strategy).execute()
             logger.info(f"Retrieved paper summary for {semantic_id}")
             return response.data[0] if response.data else None
         except Exception as e:
@@ -348,13 +348,17 @@ class PaperRepository:
             logger.error(f"Error creating comparison: {e}")
             raise
 
-    def get_paper_comparison_by_semantic_id(self, semantic_id: str) -> dict:
+    def get_paper_comparison_by_semantic_id(self, semantic_id: str, criterion_generation_strategy: str, content_generation_strategy: str, ) -> dict:
         """
         Retrieve the comparison columns for a given paper.
         """
 
         try:
-            response = self.client.table("paper_comparisons").select("comparison_data").eq("semantic_id", semantic_id).execute()
+            response = self.client.table("paper_comparisons").select("comparison_data") \
+            .eq("semantic_id", semantic_id) \
+            .eq("criterion_generation_strategy", criterion_generation_strategy) \
+            .eq("content_generation_strategy", content_generation_strategy) \
+            .execute()
             logger.info(f"Retrieved paper comparison for {semantic_id}")
             return response.data[0] if response.data else None
         except Exception as e:

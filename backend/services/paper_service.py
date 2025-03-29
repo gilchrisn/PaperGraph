@@ -5,10 +5,10 @@ import os
 from fastapi import HTTPException, WebSocket
 
 # Example imports; adjust to match your code
-from paper_comparison import generate_embedding_for_paper_chunks, compare_two_papers, create_comparison_table
+from old_code.paper_comparison import generate_embedding_for_paper_chunks, compare_two_papers, create_comparison_table
 
 # Import your PaperRepository, which handles the DB logic
-from paper_repository import PaperRepository
+from backend.repository.paper_repository import PaperRepository
 from util.frontier import Queue, PriorityQueue, Stack
 
 

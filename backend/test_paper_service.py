@@ -1,5 +1,5 @@
 import asyncio
-from paper_service import PaperService
+from backend.services.paper_service import PaperService
 
 
 # Define a dummy WebSocket that simulates send_json
