@@ -43,7 +43,7 @@ def prompt_chatgpt(messages, model="gpt-4o"):
         completion = client.chat.completions.create(
             model=model,
             messages=messages,
-            temperature=0
+            # temperature=0
         )
         response_content = completion.choices[0].message.content
         response_token_count = count_tokens(response_content, model=model)

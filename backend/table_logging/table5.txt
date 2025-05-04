@@ -1,0 +1,2813 @@
+[
+    {
+        "run": 1,
+        "details": "Criterion generation strategy: boolean_then_expand + full_table | Content generation strategy: rag",
+        "time_taken": 268.79061484336853,
+        "total_prompt_tokens": 308311,
+        "total_response_tokens": 11689,
+        "logs": [
+            {
+                "step": "expanded_manual1",
+                "version": "base",
+                "content": {
+                    "created": [
+                        {
+                            "criterion": "uses_summary_based_peeling",
+                            "description": "The paper proposes the use of summary-based peeling for densest subgraph discovery.",
+                            "is_boolean": true,
+                            "paper_id": "manual1",
+                            "comparisons": {
+                                "manual1": true
+                            }
+                        },
+                        {
+                            "criterion": "materialization_free",
+                            "description": "The proposed method avoids explicit materialization of relational graphs.",
+                            "is_boolean": true,
+                            "paper_id": "manual1",
+                            "comparisons": {
+                                "manual1": true
+                            }
+                        },
+                        {
+                            "criterion": "provides_approximation_guarantees",
+                            "description": "The paper provides approximation guarantees for the densest subgraph discovery problem.",
+                            "is_boolean": true,
+                            "paper_id": "manual1",
+                            "comparisons": {
+                                "manual1": true
+                            }
+                        },
+                        {
+                            "criterion": "handles_large_datasets",
+                            "description": "The method is tested on large datasets and demonstrates scalability.",
+                            "is_boolean": true,
+                            "paper_id": "manual1",
+                            "comparisons": {
+                                "manual1": true
+                            }
+                        },
+                        {
+                            "criterion": "complexity_analysis",
+                            "description": "The paper includes a detailed complexity analysis of the proposed method.",
+                            "is_boolean": true,
+                            "paper_id": "manual1",
+                            "comparisons": {
+                                "manual1": true
+                            }
+                        },
+                        {
+                            "criterion": "supports_multiple_density_metrics",
+                            "description": "The system can support multiple types of density metrics including edge and triangle density.",
+                            "is_boolean": true,
+                            "paper_id": "manual1",
+                            "comparisons": {
+                                "manual1": true
+                            }
+                        },
+                        {
+                            "criterion": "real_world_applications",
+                            "description": "The paper demonstrates the effectiveness of the method on real-world applications, such as fraud detection.",
+                            "is_boolean": true,
+                            "paper_id": "manual1",
+                            "comparisons": {
+                                "manual1": true
+                            }
+                        },
+                        {
+                            "criterion": "comparative_evaluation",
+                            "description": "The paper includes a comparative evaluation against baseline methods with both efficiency and effectiveness metrics.",
+                            "is_boolean": true,
+                            "paper_id": "manual1",
+                            "comparisons": {
+                                "manual1": true
+                            }
+                        },
+                        {
+                            "criterion": "parameter_sensitivity",
+                            "description": "The paper examines the sensitivity of its results to different parameter settings.",
+                            "is_boolean": true,
+                            "paper_id": "manual1",
+                            "comparisons": {
+                                "manual1": true
+                            }
+                        },
+                        {
+                            "criterion": "unbiased_estimators_for_delta_density",
+                            "description": "The paper claims that its estimators for delta-density are unbiased.",
+                            "is_boolean": true,
+                            "paper_id": "manual1",
+                            "comparisons": {
+                                "manual1": true
+                            }
+                        },
+                        {
+                            "criterion": "relational_graph_materialization_costs",
+                            "description": "The paper discusses the costs associated with relational graph materialization.",
+                            "is_boolean": true,
+                            "paper_id": "manual1",
+                            "comparisons": {
+                                "manual1": true
+                            }
+                        },
+                        {
+                            "criterion": "result_precision_reported",
+                            "description": "The paper reports precision metrics for its results in fraud detection scenarios.",
+                            "is_boolean": true,
+                            "paper_id": "manual1",
+                            "comparisons": {
+                                "manual1": true
+                            }
+                        },
+                        {
+                            "criterion": "meta_path_support",
+                            "description": "The proposed system supports the use of meta-paths for the extraction of relational graphs from knowledge graphs.",
+                            "is_boolean": true,
+                            "paper_id": "manual1",
+                            "comparisons": {
+                                "manual1": true
+                            }
+                        },
+                        {
+                            "criterion": "technical_contributions",
+                            "description": "The paper outlines specific technical contributions that differentiate it from prior studies.",
+                            "is_boolean": true,
+                            "paper_id": "manual1",
+                            "comparisons": {
+                                "manual1": true
+                            }
+                        },
+                        {
+                            "criterion": "provides_probabilistic_bounds",
+                            "description": "The paper provides probabilistic bounds on the accuracy of its estimators.",
+                            "is_boolean": true,
+                            "paper_id": "manual1",
+                            "comparisons": {
+                                "manual1": true
+                            }
+                        },
+                        {
+                            "criterion": "applies_to_heterogeneous_data",
+                            "description": "The system is designed to work directly with heterogeneous data sources.",
+                            "is_boolean": true,
+                            "paper_id": "manual1",
+                            "comparisons": {
+                                "manual1": true
+                            }
+                        }
+                    ],
+                    "removed": []
+                },
+                "full_snapshot": [
+                    {
+                        "criterion": "uses_summary_based_peeling",
+                        "description": "The paper proposes the use of summary-based peeling for densest subgraph discovery.",
+                        "is_boolean": true,
+                        "paper_id": "manual1",
+                        "comparisons": {
+                            "manual1": true
+                        }
+                    },
+                    {
+                        "criterion": "materialization_free",
+                        "description": "The proposed method avoids explicit materialization of relational graphs.",
+                        "is_boolean": true,
+                        "paper_id": "manual1",
+                        "comparisons": {
+                            "manual1": true
+                        }
+                    },
+                    {
+                        "criterion": "provides_approximation_guarantees",
+                        "description": "The paper provides approximation guarantees for the densest subgraph discovery problem.",
+                        "is_boolean": true,
+                        "paper_id": "manual1",
+                        "comparisons": {
+                            "manual1": true
+                        }
+                    },
+                    {
+                        "criterion": "handles_large_datasets",
+                        "description": "The method is tested on large datasets and demonstrates scalability.",
+                        "is_boolean": true,
+                        "paper_id": "manual1",
+                        "comparisons": {
+                            "manual1": true
+                        }
+                    },
+                    {
+                        "criterion": "complexity_analysis",
+                        "description": "The paper includes a detailed complexity analysis of the proposed method.",
+                        "is_boolean": true,
+                        "paper_id": "manual1",
+                        "comparisons": {
+                            "manual1": true
+                        }
+                    },
+                    {
+                        "criterion": "supports_multiple_density_metrics",
+                        "description": "The system can support multiple types of density metrics including edge and triangle density.",
+                        "is_boolean": true,
+                        "paper_id": "manual1",
+                        "comparisons": {
+                            "manual1": true
+                        }
+                    },
+                    {
+                        "criterion": "real_world_applications",
+                        "description": "The paper demonstrates the effectiveness of the method on real-world applications, such as fraud detection.",
+                        "is_boolean": true,
+                        "paper_id": "manual1",
+                        "comparisons": {
+                            "manual1": true
+                        }
+                    },
+                    {
+                        "criterion": "comparative_evaluation",
+                        "description": "The paper includes a comparative evaluation against baseline methods with both efficiency and effectiveness metrics.",
+                        "is_boolean": true,
+                        "paper_id": "manual1",
+                        "comparisons": {
+                            "manual1": true
+                        }
+                    },
+                    {
+                        "criterion": "parameter_sensitivity",
+                        "description": "The paper examines the sensitivity of its results to different parameter settings.",
+                        "is_boolean": true,
+                        "paper_id": "manual1",
+                        "comparisons": {
+                            "manual1": true
+                        }
+                    },
+                    {
+                        "criterion": "unbiased_estimators_for_delta_density",
+                        "description": "The paper claims that its estimators for delta-density are unbiased.",
+                        "is_boolean": true,
+                        "paper_id": "manual1",
+                        "comparisons": {
+                            "manual1": true
+                        }
+                    },
+                    {
+                        "criterion": "relational_graph_materialization_costs",
+                        "description": "The paper discusses the costs associated with relational graph materialization.",
+                        "is_boolean": true,
+                        "paper_id": "manual1",
+                        "comparisons": {
+                            "manual1": true
+                        }
+                    },
+                    {
+                        "criterion": "result_precision_reported",
+                        "description": "The paper reports precision metrics for its results in fraud detection scenarios.",
+                        "is_boolean": true,
+                        "paper_id": "manual1",
+                        "comparisons": {
+                            "manual1": true
+                        }
+                    },
+                    {
+                        "criterion": "meta_path_support",
+                        "description": "The proposed system supports the use of meta-paths for the extraction of relational graphs from knowledge graphs.",
+                        "is_boolean": true,
+                        "paper_id": "manual1",
+                        "comparisons": {
+                            "manual1": true
+                        }
+                    },
+                    {
+                        "criterion": "technical_contributions",
+                        "description": "The paper outlines specific technical contributions that differentiate it from prior studies.",
+                        "is_boolean": true,
+                        "paper_id": "manual1",
+                        "comparisons": {
+                            "manual1": true
+                        }
+                    },
+                    {
+                        "criterion": "provides_probabilistic_bounds",
+                        "description": "The paper provides probabilistic bounds on the accuracy of its estimators.",
+                        "is_boolean": true,
+                        "paper_id": "manual1",
+                        "comparisons": {
+                            "manual1": true
+                        }
+                    },
+                    {
+                        "criterion": "applies_to_heterogeneous_data",
+                        "description": "The system is designed to work directly with heterogeneous data sources.",
+                        "is_boolean": true,
+                        "paper_id": "manual1",
+                        "comparisons": {
+                            "manual1": true
+                        }
+                    }
+                ]
+            },
+            {
+                "step": "expanded_fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef",
+                "version": "delta",
+                "content": {
+                    "created": [
+                        {
+                            "criterion": "experimental_results_presented"
+                        },
+                        {
+                            "criterion": "theoretical_guarantees_provided"
+                        },
+                        {
+                            "criterion": "directed_and_undirected_handled"
+                        },
+                        {
+                            "criterion": "future_research_areas_identified"
+                        },
+                        {
+                            "criterion": "lower_bounds_discussed"
+                        },
+                        {
+                            "criterion": "uses_count_sketch"
+                        },
+                        {
+                            "criterion": "mapreduce_model_used"
+                        },
+                        {
+                            "criterion": "experiment_with_sketching_technique"
+                        },
+                        {
+                            "criterion": "provides_dataset_information"
+                        },
+                        {
+                            "criterion": "streaming_model_used"
+                        },
+                        {
+                            "criterion": "constant_factor_approximation"
+                        },
+                        {
+                            "criterion": "explores_dense_subgraphs_applications"
+                        },
+                        {
+                            "criterion": "acknowledges_theoretical_impracticality"
+                        },
+                        {
+                            "criterion": "large_scale_datasets_used"
+                        }
+                    ],
+                    "removed": []
+                },
+                "full_snapshot": [
+                    {
+                        "criterion": "uses_summary_based_peeling",
+                        "description": "The paper proposes the use of summary-based peeling for densest subgraph discovery.",
+                        "is_boolean": true,
+                        "paper_id": "manual1",
+                        "comparisons": {
+                            "manual1": true,
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": ""
+                        }
+                    },
+                    {
+                        "criterion": "materialization_free",
+                        "description": "The proposed method avoids explicit materialization of relational graphs.",
+                        "is_boolean": true,
+                        "paper_id": "manual1",
+                        "comparisons": {
+                            "manual1": true,
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": ""
+                        }
+                    },
+                    {
+                        "criterion": "provides_approximation_guarantees",
+                        "description": "The paper provides approximation guarantees for the densest subgraph discovery problem.",
+                        "is_boolean": true,
+                        "paper_id": "manual1",
+                        "comparisons": {
+                            "manual1": true,
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": ""
+                        }
+                    },
+                    {
+                        "criterion": "handles_large_datasets",
+                        "description": "The method is tested on large datasets and demonstrates scalability.",
+                        "is_boolean": true,
+                        "paper_id": "manual1",
+                        "comparisons": {
+                            "manual1": true,
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": ""
+                        }
+                    },
+                    {
+                        "criterion": "complexity_analysis",
+                        "description": "The paper includes a detailed complexity analysis of the proposed method.",
+                        "is_boolean": true,
+                        "paper_id": "manual1",
+                        "comparisons": {
+                            "manual1": true,
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": ""
+                        }
+                    },
+                    {
+                        "criterion": "supports_multiple_density_metrics",
+                        "description": "The system can support multiple types of density metrics including edge and triangle density.",
+                        "is_boolean": true,
+                        "paper_id": "manual1",
+                        "comparisons": {
+                            "manual1": true,
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": ""
+                        }
+                    },
+                    {
+                        "criterion": "real_world_applications",
+                        "description": "The paper demonstrates the effectiveness of the method on real-world applications, such as fraud detection.",
+                        "is_boolean": true,
+                        "paper_id": "manual1",
+                        "comparisons": {
+                            "manual1": true,
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": ""
+                        }
+                    },
+                    {
+                        "criterion": "comparative_evaluation",
+                        "description": "The paper includes a comparative evaluation against baseline methods with both efficiency and effectiveness metrics.",
+                        "is_boolean": true,
+                        "paper_id": "manual1",
+                        "comparisons": {
+                            "manual1": true,
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": ""
+                        }
+                    },
+                    {
+                        "criterion": "parameter_sensitivity",
+                        "description": "The paper examines the sensitivity of its results to different parameter settings.",
+                        "is_boolean": true,
+                        "paper_id": "manual1",
+                        "comparisons": {
+                            "manual1": true,
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": ""
+                        }
+                    },
+                    {
+                        "criterion": "unbiased_estimators_for_delta_density",
+                        "description": "The paper claims that its estimators for delta-density are unbiased.",
+                        "is_boolean": true,
+                        "paper_id": "manual1",
+                        "comparisons": {
+                            "manual1": true,
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": ""
+                        }
+                    },
+                    {
+                        "criterion": "relational_graph_materialization_costs",
+                        "description": "The paper discusses the costs associated with relational graph materialization.",
+                        "is_boolean": true,
+                        "paper_id": "manual1",
+                        "comparisons": {
+                            "manual1": true,
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": ""
+                        }
+                    },
+                    {
+                        "criterion": "result_precision_reported",
+                        "description": "The paper reports precision metrics for its results in fraud detection scenarios.",
+                        "is_boolean": true,
+                        "paper_id": "manual1",
+                        "comparisons": {
+                            "manual1": true,
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": ""
+                        }
+                    },
+                    {
+                        "criterion": "meta_path_support",
+                        "description": "The proposed system supports the use of meta-paths for the extraction of relational graphs from knowledge graphs.",
+                        "is_boolean": true,
+                        "paper_id": "manual1",
+                        "comparisons": {
+                            "manual1": true,
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": ""
+                        }
+                    },
+                    {
+                        "criterion": "technical_contributions",
+                        "description": "The paper outlines specific technical contributions that differentiate it from prior studies.",
+                        "is_boolean": true,
+                        "paper_id": "manual1",
+                        "comparisons": {
+                            "manual1": true,
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": ""
+                        }
+                    },
+                    {
+                        "criterion": "provides_probabilistic_bounds",
+                        "description": "The paper provides probabilistic bounds on the accuracy of its estimators.",
+                        "is_boolean": true,
+                        "paper_id": "manual1",
+                        "comparisons": {
+                            "manual1": true,
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": ""
+                        }
+                    },
+                    {
+                        "criterion": "applies_to_heterogeneous_data",
+                        "description": "The system is designed to work directly with heterogeneous data sources.",
+                        "is_boolean": true,
+                        "paper_id": "manual1",
+                        "comparisons": {
+                            "manual1": true,
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": ""
+                        }
+                    },
+                    {
+                        "criterion": "streaming_model_used",
+                        "description": "The paper utilizes the streaming model for algorithm development.",
+                        "is_boolean": true,
+                        "paper_id": "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef",
+                        "comparisons": {
+                            "manual1": "",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": true
+                        }
+                    },
+                    {
+                        "criterion": "mapreduce_model_used",
+                        "description": "The paper implements its algorithms using the MapReduce model.",
+                        "is_boolean": true,
+                        "paper_id": "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef",
+                        "comparisons": {
+                            "manual1": "",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": true
+                        }
+                    },
+                    {
+                        "criterion": "constant_factor_approximation",
+                        "description": "The paper provides a constant-factor approximation algorithm for the densest subgraph problem.",
+                        "is_boolean": true,
+                        "paper_id": "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef",
+                        "comparisons": {
+                            "manual1": "",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": true
+                        }
+                    },
+                    {
+                        "criterion": "directed_and_undirected_handled",
+                        "description": "The algorithms in the paper address both directed and undirected graphs.",
+                        "is_boolean": true,
+                        "paper_id": "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef",
+                        "comparisons": {
+                            "manual1": "",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": true
+                        }
+                    },
+                    {
+                        "criterion": "large_scale_datasets_used",
+                        "description": "Experiments in the paper were conducted on large-scale datasets.",
+                        "is_boolean": true,
+                        "paper_id": "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef",
+                        "comparisons": {
+                            "manual1": "",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": true
+                        }
+                    },
+                    {
+                        "criterion": "theoretical_guarantees_provided",
+                        "description": "The algorithms in the paper come with theoretical performance guarantees.",
+                        "is_boolean": true,
+                        "paper_id": "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef",
+                        "comparisons": {
+                            "manual1": "",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": true
+                        }
+                    },
+                    {
+                        "criterion": "experimental_results_presented",
+                        "description": "The paper presents experimental results validating the algorithms.",
+                        "is_boolean": true,
+                        "paper_id": "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef",
+                        "comparisons": {
+                            "manual1": "",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": true
+                        }
+                    },
+                    {
+                        "criterion": "acknowledges_theoretical_impracticality",
+                        "description": "The paper acknowledges the impracticality of computing exact solutions for densest subgraphs in very large graphs.",
+                        "is_boolean": true,
+                        "paper_id": "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef",
+                        "comparisons": {
+                            "manual1": "",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": true
+                        }
+                    },
+                    {
+                        "criterion": "experiment_with_sketching_technique",
+                        "description": "The paper includes experiments using a sketching technique to reduce memory usage.",
+                        "is_boolean": true,
+                        "paper_id": "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef",
+                        "comparisons": {
+                            "manual1": "",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": true
+                        }
+                    },
+                    {
+                        "criterion": "uses_count_sketch",
+                        "description": "The paper utilizes the Count-Sketch data structure in its algorithmic approach.",
+                        "is_boolean": true,
+                        "paper_id": "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef",
+                        "comparisons": {
+                            "manual1": "",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": true
+                        }
+                    },
+                    {
+                        "criterion": "lower_bounds_discussed",
+                        "description": "The paper discusses lower bounds on space requirements for streaming algorithms.",
+                        "is_boolean": true,
+                        "paper_id": "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef",
+                        "comparisons": {
+                            "manual1": "",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": true
+                        }
+                    },
+                    {
+                        "criterion": "explores_dense_subgraphs_applications",
+                        "description": "The paper explores applications of the densest subgraph problem in various domains.",
+                        "is_boolean": true,
+                        "paper_id": "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef",
+                        "comparisons": {
+                            "manual1": "",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": true
+                        }
+                    },
+                    {
+                        "criterion": "provides_dataset_information",
+                        "description": "The paper provides detailed information on the datasets used for experiments.",
+                        "is_boolean": true,
+                        "paper_id": "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef",
+                        "comparisons": {
+                            "manual1": "",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": true
+                        }
+                    },
+                    {
+                        "criterion": "future_research_areas_identified",
+                        "description": "The paper identifies areas for future research based on its findings.",
+                        "is_boolean": true,
+                        "paper_id": "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef",
+                        "comparisons": {
+                            "manual1": "",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": true
+                        }
+                    }
+                ]
+            },
+            {
+                "step": "expanded_9cb4316403b1a30ae637003466336fc1347e6ddc",
+                "version": "delta",
+                "content": {
+                    "created": [
+                        {
+                            "criterion": "paper_expandable_for_large_scale_data"
+                        },
+                        {
+                            "criterion": "has_algorithmic_contributions"
+                        },
+                        {
+                            "criterion": "compares_with_maximum_flow"
+                        },
+                        {
+                            "criterion": "explores_dual_lp_formulation"
+                        },
+                        {
+                            "criterion": "provides_complexity_analysis"
+                        },
+                        {
+                            "criterion": "addresses_np_hard_problems"
+                        },
+                        {
+                            "criterion": "multifaceted_performance_verification"
+                        },
+                        {
+                            "criterion": "provides_theoretical_guarantees"
+                        },
+                        {
+                            "criterion": "includes_pseudocode"
+                        },
+                        {
+                            "criterion": "applies_multiplicative_weights_update"
+                        },
+                        {
+                            "criterion": "uses_real_world_datasets"
+                        },
+                        {
+                            "criterion": "includes_experimental_analysis"
+                        },
+                        {
+                            "criterion": "improves_on_charikar_algorithm"
+                        }
+                    ],
+                    "removed": []
+                },
+                "full_snapshot": [
+                    {
+                        "criterion": "uses_summary_based_peeling",
+                        "description": "The paper proposes the use of summary-based peeling for densest subgraph discovery.",
+                        "is_boolean": true,
+                        "paper_id": "manual1",
+                        "comparisons": {
+                            "manual1": true,
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": "",
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": ""
+                        }
+                    },
+                    {
+                        "criterion": "materialization_free",
+                        "description": "The proposed method avoids explicit materialization of relational graphs.",
+                        "is_boolean": true,
+                        "paper_id": "manual1",
+                        "comparisons": {
+                            "manual1": true,
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": "",
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": ""
+                        }
+                    },
+                    {
+                        "criterion": "provides_approximation_guarantees",
+                        "description": "The paper provides approximation guarantees for the densest subgraph discovery problem.",
+                        "is_boolean": true,
+                        "paper_id": "manual1",
+                        "comparisons": {
+                            "manual1": true,
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": "",
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": ""
+                        }
+                    },
+                    {
+                        "criterion": "handles_large_datasets",
+                        "description": "The method is tested on large datasets and demonstrates scalability.",
+                        "is_boolean": true,
+                        "paper_id": "manual1",
+                        "comparisons": {
+                            "manual1": true,
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": "",
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": ""
+                        }
+                    },
+                    {
+                        "criterion": "complexity_analysis",
+                        "description": "The paper includes a detailed complexity analysis of the proposed method.",
+                        "is_boolean": true,
+                        "paper_id": "manual1",
+                        "comparisons": {
+                            "manual1": true,
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": "",
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": ""
+                        }
+                    },
+                    {
+                        "criterion": "supports_multiple_density_metrics",
+                        "description": "The system can support multiple types of density metrics including edge and triangle density.",
+                        "is_boolean": true,
+                        "paper_id": "manual1",
+                        "comparisons": {
+                            "manual1": true,
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": "",
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": ""
+                        }
+                    },
+                    {
+                        "criterion": "real_world_applications",
+                        "description": "The paper demonstrates the effectiveness of the method on real-world applications, such as fraud detection.",
+                        "is_boolean": true,
+                        "paper_id": "manual1",
+                        "comparisons": {
+                            "manual1": true,
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": "",
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": ""
+                        }
+                    },
+                    {
+                        "criterion": "comparative_evaluation",
+                        "description": "The paper includes a comparative evaluation against baseline methods with both efficiency and effectiveness metrics.",
+                        "is_boolean": true,
+                        "paper_id": "manual1",
+                        "comparisons": {
+                            "manual1": true,
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": "",
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": ""
+                        }
+                    },
+                    {
+                        "criterion": "parameter_sensitivity",
+                        "description": "The paper examines the sensitivity of its results to different parameter settings.",
+                        "is_boolean": true,
+                        "paper_id": "manual1",
+                        "comparisons": {
+                            "manual1": true,
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": "",
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": ""
+                        }
+                    },
+                    {
+                        "criterion": "unbiased_estimators_for_delta_density",
+                        "description": "The paper claims that its estimators for delta-density are unbiased.",
+                        "is_boolean": true,
+                        "paper_id": "manual1",
+                        "comparisons": {
+                            "manual1": true,
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": "",
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": ""
+                        }
+                    },
+                    {
+                        "criterion": "relational_graph_materialization_costs",
+                        "description": "The paper discusses the costs associated with relational graph materialization.",
+                        "is_boolean": true,
+                        "paper_id": "manual1",
+                        "comparisons": {
+                            "manual1": true,
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": "",
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": ""
+                        }
+                    },
+                    {
+                        "criterion": "result_precision_reported",
+                        "description": "The paper reports precision metrics for its results in fraud detection scenarios.",
+                        "is_boolean": true,
+                        "paper_id": "manual1",
+                        "comparisons": {
+                            "manual1": true,
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": "",
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": ""
+                        }
+                    },
+                    {
+                        "criterion": "meta_path_support",
+                        "description": "The proposed system supports the use of meta-paths for the extraction of relational graphs from knowledge graphs.",
+                        "is_boolean": true,
+                        "paper_id": "manual1",
+                        "comparisons": {
+                            "manual1": true,
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": "",
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": ""
+                        }
+                    },
+                    {
+                        "criterion": "technical_contributions",
+                        "description": "The paper outlines specific technical contributions that differentiate it from prior studies.",
+                        "is_boolean": true,
+                        "paper_id": "manual1",
+                        "comparisons": {
+                            "manual1": true,
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": "",
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": ""
+                        }
+                    },
+                    {
+                        "criterion": "provides_probabilistic_bounds",
+                        "description": "The paper provides probabilistic bounds on the accuracy of its estimators.",
+                        "is_boolean": true,
+                        "paper_id": "manual1",
+                        "comparisons": {
+                            "manual1": true,
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": "",
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": ""
+                        }
+                    },
+                    {
+                        "criterion": "applies_to_heterogeneous_data",
+                        "description": "The system is designed to work directly with heterogeneous data sources.",
+                        "is_boolean": true,
+                        "paper_id": "manual1",
+                        "comparisons": {
+                            "manual1": true,
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": "",
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": ""
+                        }
+                    },
+                    {
+                        "criterion": "streaming_model_used",
+                        "description": "The paper utilizes the streaming model for algorithm development.",
+                        "is_boolean": true,
+                        "paper_id": "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef",
+                        "comparisons": {
+                            "manual1": "",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": true,
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": ""
+                        }
+                    },
+                    {
+                        "criterion": "mapreduce_model_used",
+                        "description": "The paper implements its algorithms using the MapReduce model.",
+                        "is_boolean": true,
+                        "paper_id": "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef",
+                        "comparisons": {
+                            "manual1": "",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": true,
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": ""
+                        }
+                    },
+                    {
+                        "criterion": "constant_factor_approximation",
+                        "description": "The paper provides a constant-factor approximation algorithm for the densest subgraph problem.",
+                        "is_boolean": true,
+                        "paper_id": "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef",
+                        "comparisons": {
+                            "manual1": "",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": true,
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": ""
+                        }
+                    },
+                    {
+                        "criterion": "directed_and_undirected_handled",
+                        "description": "The algorithms in the paper address both directed and undirected graphs.",
+                        "is_boolean": true,
+                        "paper_id": "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef",
+                        "comparisons": {
+                            "manual1": "",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": true,
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": ""
+                        }
+                    },
+                    {
+                        "criterion": "large_scale_datasets_used",
+                        "description": "Experiments in the paper were conducted on large-scale datasets.",
+                        "is_boolean": true,
+                        "paper_id": "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef",
+                        "comparisons": {
+                            "manual1": "",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": true,
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": ""
+                        }
+                    },
+                    {
+                        "criterion": "theoretical_guarantees_provided",
+                        "description": "The algorithms in the paper come with theoretical performance guarantees.",
+                        "is_boolean": true,
+                        "paper_id": "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef",
+                        "comparisons": {
+                            "manual1": "",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": true,
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": ""
+                        }
+                    },
+                    {
+                        "criterion": "experimental_results_presented",
+                        "description": "The paper presents experimental results validating the algorithms.",
+                        "is_boolean": true,
+                        "paper_id": "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef",
+                        "comparisons": {
+                            "manual1": "",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": true,
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": ""
+                        }
+                    },
+                    {
+                        "criterion": "acknowledges_theoretical_impracticality",
+                        "description": "The paper acknowledges the impracticality of computing exact solutions for densest subgraphs in very large graphs.",
+                        "is_boolean": true,
+                        "paper_id": "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef",
+                        "comparisons": {
+                            "manual1": "",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": true,
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": ""
+                        }
+                    },
+                    {
+                        "criterion": "experiment_with_sketching_technique",
+                        "description": "The paper includes experiments using a sketching technique to reduce memory usage.",
+                        "is_boolean": true,
+                        "paper_id": "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef",
+                        "comparisons": {
+                            "manual1": "",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": true,
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": ""
+                        }
+                    },
+                    {
+                        "criterion": "uses_count_sketch",
+                        "description": "The paper utilizes the Count-Sketch data structure in its algorithmic approach.",
+                        "is_boolean": true,
+                        "paper_id": "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef",
+                        "comparisons": {
+                            "manual1": "",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": true,
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": ""
+                        }
+                    },
+                    {
+                        "criterion": "lower_bounds_discussed",
+                        "description": "The paper discusses lower bounds on space requirements for streaming algorithms.",
+                        "is_boolean": true,
+                        "paper_id": "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef",
+                        "comparisons": {
+                            "manual1": "",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": true,
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": ""
+                        }
+                    },
+                    {
+                        "criterion": "explores_dense_subgraphs_applications",
+                        "description": "The paper explores applications of the densest subgraph problem in various domains.",
+                        "is_boolean": true,
+                        "paper_id": "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef",
+                        "comparisons": {
+                            "manual1": "",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": true,
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": ""
+                        }
+                    },
+                    {
+                        "criterion": "provides_dataset_information",
+                        "description": "The paper provides detailed information on the datasets used for experiments.",
+                        "is_boolean": true,
+                        "paper_id": "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef",
+                        "comparisons": {
+                            "manual1": "",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": true,
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": ""
+                        }
+                    },
+                    {
+                        "criterion": "future_research_areas_identified",
+                        "description": "The paper identifies areas for future research based on its findings.",
+                        "is_boolean": true,
+                        "paper_id": "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef",
+                        "comparisons": {
+                            "manual1": "",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": true,
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": ""
+                        }
+                    },
+                    {
+                        "criterion": "uses_real_world_datasets",
+                        "description": "The paper evaluates the proposed algorithm Greedy++ on a variety of real-world datasets.",
+                        "is_boolean": true,
+                        "paper_id": "9cb4316403b1a30ae637003466336fc1347e6ddc",
+                        "comparisons": {
+                            "manual1": "",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": "",
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": true
+                        }
+                    },
+                    {
+                        "criterion": "improves_on_charikar_algorithm",
+                        "description": "The paper introduces Greedy++, which is designed to improve upon Charikar's greedy algorithm for the densest subgraph problem.",
+                        "is_boolean": true,
+                        "paper_id": "9cb4316403b1a30ae637003466336fc1347e6ddc",
+                        "comparisons": {
+                            "manual1": "",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": "",
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": true
+                        }
+                    },
+                    {
+                        "criterion": "provides_theoretical_guarantees",
+                        "description": "The paper provides theoretical guarantees for the approximation factor of the Greedy++ algorithm.",
+                        "is_boolean": true,
+                        "paper_id": "9cb4316403b1a30ae637003466336fc1347e6ddc",
+                        "comparisons": {
+                            "manual1": "",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": "",
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": true
+                        }
+                    },
+                    {
+                        "criterion": "has_algorithmic_contributions",
+                        "description": "The paper introduces new algorithmic strategies for solving the densest subgraph problem efficiently.",
+                        "is_boolean": true,
+                        "paper_id": "9cb4316403b1a30ae637003466336fc1347e6ddc",
+                        "comparisons": {
+                            "manual1": "",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": "",
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": true
+                        }
+                    },
+                    {
+                        "criterion": "includes_experimental_analysis",
+                        "description": "The paper performs experimental analysis to compare the performance of Greedy++ with existing algorithms.",
+                        "is_boolean": true,
+                        "paper_id": "9cb4316403b1a30ae637003466336fc1347e6ddc",
+                        "comparisons": {
+                            "manual1": "",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": "",
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": true
+                        }
+                    },
+                    {
+                        "criterion": "addresses_np_hard_problems",
+                        "description": "The paper discusses NP-hard aspects of certain variations of the densest subgraph problem.",
+                        "is_boolean": true,
+                        "paper_id": "9cb4316403b1a30ae637003466336fc1347e6ddc",
+                        "comparisons": {
+                            "manual1": "",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": "",
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": true
+                        }
+                    },
+                    {
+                        "criterion": "explores_dual_lp_formulation",
+                        "description": "The paper explores the dual linear programming formulation for the densest subgraph problem and uses it in their algorithmic approach.",
+                        "is_boolean": true,
+                        "paper_id": "9cb4316403b1a30ae637003466336fc1347e6ddc",
+                        "comparisons": {
+                            "manual1": "",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": "",
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": true
+                        }
+                    },
+                    {
+                        "criterion": "applies_multiplicative_weights_update",
+                        "description": "The proposed method employs the multiplicative weights update framework as part of its algorithmic strategy.",
+                        "is_boolean": true,
+                        "paper_id": "9cb4316403b1a30ae637003466336fc1347e6ddc",
+                        "comparisons": {
+                            "manual1": "",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": "",
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": true
+                        }
+                    },
+                    {
+                        "criterion": "compares_with_maximum_flow",
+                        "description": "The paper compares the Greedy++ algorithm with exact algorithms using maximum flow for solving the DSP.",
+                        "is_boolean": true,
+                        "paper_id": "9cb4316403b1a30ae637003466336fc1347e6ddc",
+                        "comparisons": {
+                            "manual1": "",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": "",
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": true
+                        }
+                    },
+                    {
+                        "criterion": "provides_complexity_analysis",
+                        "description": "The paper analyzes the time complexity of the proposed Greedy++ algorithm in detail.",
+                        "is_boolean": true,
+                        "paper_id": "9cb4316403b1a30ae637003466336fc1347e6ddc",
+                        "comparisons": {
+                            "manual1": "",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": "",
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": true
+                        }
+                    },
+                    {
+                        "criterion": "paper_expandable_for_large_scale_data",
+                        "description": "The paper provides insights into scaling the algorithm for large-scale data mining tasks.",
+                        "is_boolean": true,
+                        "paper_id": "9cb4316403b1a30ae637003466336fc1347e6ddc",
+                        "comparisons": {
+                            "manual1": "",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": "",
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": true
+                        }
+                    },
+                    {
+                        "criterion": "includes_pseudocode",
+                        "description": "The paper provides pseudocode for the proposed Greedy++ algorithm.",
+                        "is_boolean": true,
+                        "paper_id": "9cb4316403b1a30ae637003466336fc1347e6ddc",
+                        "comparisons": {
+                            "manual1": "",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": "",
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": true
+                        }
+                    },
+                    {
+                        "criterion": "multifaceted_performance_verification",
+                        "description": "The performance of Greedy++ is verified through various lenses including accuracy, speedup, and convergence behavior.",
+                        "is_boolean": true,
+                        "paper_id": "9cb4316403b1a30ae637003466336fc1347e6ddc",
+                        "comparisons": {
+                            "manual1": "",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": "",
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": true
+                        }
+                    }
+                ]
+            },
+            {
+                "step": "expanded_3ad88b425fd26a6475250bbafd525b12f17f960d",
+                "version": "delta",
+                "content": {
+                    "created": [
+                        {
+                            "criterion": "caches_metapath_queries"
+                        },
+                        {
+                            "criterion": "employs_dynamic_programming"
+                        },
+                        {
+                            "criterion": "focuses_on_HINs"
+                        },
+                        {
+                            "criterion": "utilizes_overlap_tree"
+                        },
+                        {
+                            "criterion": "uses_knowledge_graph"
+                        },
+                        {
+                            "criterion": "introduces_caching_mechanism"
+                        },
+                        {
+                            "criterion": "experimental_evaluation"
+                        },
+                        {
+                            "criterion": "considers_constraint_queries"
+                        },
+                        {
+                            "criterion": "improves_metapath_computation"
+                        },
+                        {
+                            "criterion": "evaluates_zipfian_distributions"
+                        },
+                        {
+                            "criterion": "evaluates_in_HIN"
+                        },
+                        {
+                            "criterion": "compares_with_existing_methods"
+                        }
+                    ],
+                    "removed": []
+                },
+                "full_snapshot": [
+                    {
+                        "criterion": "uses_summary_based_peeling",
+                        "description": "The paper proposes the use of summary-based peeling for densest subgraph discovery.",
+                        "is_boolean": true,
+                        "paper_id": "manual1",
+                        "comparisons": {
+                            "manual1": true,
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": "",
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": "",
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d": ""
+                        }
+                    },
+                    {
+                        "criterion": "materialization_free",
+                        "description": "The proposed method avoids explicit materialization of relational graphs.",
+                        "is_boolean": true,
+                        "paper_id": "manual1",
+                        "comparisons": {
+                            "manual1": true,
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": "",
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": "",
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d": ""
+                        }
+                    },
+                    {
+                        "criterion": "provides_approximation_guarantees",
+                        "description": "The paper provides approximation guarantees for the densest subgraph discovery problem.",
+                        "is_boolean": true,
+                        "paper_id": "manual1",
+                        "comparisons": {
+                            "manual1": true,
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": "",
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": "",
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d": ""
+                        }
+                    },
+                    {
+                        "criterion": "handles_large_datasets",
+                        "description": "The method is tested on large datasets and demonstrates scalability.",
+                        "is_boolean": true,
+                        "paper_id": "manual1",
+                        "comparisons": {
+                            "manual1": true,
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": "",
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": "",
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d": ""
+                        }
+                    },
+                    {
+                        "criterion": "complexity_analysis",
+                        "description": "The paper includes a detailed complexity analysis of the proposed method.",
+                        "is_boolean": true,
+                        "paper_id": "manual1",
+                        "comparisons": {
+                            "manual1": true,
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": "",
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": "",
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d": ""
+                        }
+                    },
+                    {
+                        "criterion": "supports_multiple_density_metrics",
+                        "description": "The system can support multiple types of density metrics including edge and triangle density.",
+                        "is_boolean": true,
+                        "paper_id": "manual1",
+                        "comparisons": {
+                            "manual1": true,
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": "",
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": "",
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d": ""
+                        }
+                    },
+                    {
+                        "criterion": "real_world_applications",
+                        "description": "The paper demonstrates the effectiveness of the method on real-world applications, such as fraud detection.",
+                        "is_boolean": true,
+                        "paper_id": "manual1",
+                        "comparisons": {
+                            "manual1": true,
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": "",
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": "",
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d": ""
+                        }
+                    },
+                    {
+                        "criterion": "comparative_evaluation",
+                        "description": "The paper includes a comparative evaluation against baseline methods with both efficiency and effectiveness metrics.",
+                        "is_boolean": true,
+                        "paper_id": "manual1",
+                        "comparisons": {
+                            "manual1": true,
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": "",
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": "",
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d": ""
+                        }
+                    },
+                    {
+                        "criterion": "parameter_sensitivity",
+                        "description": "The paper examines the sensitivity of its results to different parameter settings.",
+                        "is_boolean": true,
+                        "paper_id": "manual1",
+                        "comparisons": {
+                            "manual1": true,
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": "",
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": "",
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d": ""
+                        }
+                    },
+                    {
+                        "criterion": "unbiased_estimators_for_delta_density",
+                        "description": "The paper claims that its estimators for delta-density are unbiased.",
+                        "is_boolean": true,
+                        "paper_id": "manual1",
+                        "comparisons": {
+                            "manual1": true,
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": "",
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": "",
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d": ""
+                        }
+                    },
+                    {
+                        "criterion": "relational_graph_materialization_costs",
+                        "description": "The paper discusses the costs associated with relational graph materialization.",
+                        "is_boolean": true,
+                        "paper_id": "manual1",
+                        "comparisons": {
+                            "manual1": true,
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": "",
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": "",
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d": ""
+                        }
+                    },
+                    {
+                        "criterion": "result_precision_reported",
+                        "description": "The paper reports precision metrics for its results in fraud detection scenarios.",
+                        "is_boolean": true,
+                        "paper_id": "manual1",
+                        "comparisons": {
+                            "manual1": true,
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": "",
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": "",
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d": ""
+                        }
+                    },
+                    {
+                        "criterion": "meta_path_support",
+                        "description": "The proposed system supports the use of meta-paths for the extraction of relational graphs from knowledge graphs.",
+                        "is_boolean": true,
+                        "paper_id": "manual1",
+                        "comparisons": {
+                            "manual1": true,
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": "",
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": "",
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d": ""
+                        }
+                    },
+                    {
+                        "criterion": "technical_contributions",
+                        "description": "The paper outlines specific technical contributions that differentiate it from prior studies.",
+                        "is_boolean": true,
+                        "paper_id": "manual1",
+                        "comparisons": {
+                            "manual1": true,
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": "",
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": "",
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d": ""
+                        }
+                    },
+                    {
+                        "criterion": "provides_probabilistic_bounds",
+                        "description": "The paper provides probabilistic bounds on the accuracy of its estimators.",
+                        "is_boolean": true,
+                        "paper_id": "manual1",
+                        "comparisons": {
+                            "manual1": true,
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": "",
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": "",
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d": ""
+                        }
+                    },
+                    {
+                        "criterion": "applies_to_heterogeneous_data",
+                        "description": "The system is designed to work directly with heterogeneous data sources.",
+                        "is_boolean": true,
+                        "paper_id": "manual1",
+                        "comparisons": {
+                            "manual1": true,
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": "",
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": "",
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d": ""
+                        }
+                    },
+                    {
+                        "criterion": "streaming_model_used",
+                        "description": "The paper utilizes the streaming model for algorithm development.",
+                        "is_boolean": true,
+                        "paper_id": "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef",
+                        "comparisons": {
+                            "manual1": "",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": true,
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": "",
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d": ""
+                        }
+                    },
+                    {
+                        "criterion": "mapreduce_model_used",
+                        "description": "The paper implements its algorithms using the MapReduce model.",
+                        "is_boolean": true,
+                        "paper_id": "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef",
+                        "comparisons": {
+                            "manual1": "",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": true,
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": "",
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d": ""
+                        }
+                    },
+                    {
+                        "criterion": "constant_factor_approximation",
+                        "description": "The paper provides a constant-factor approximation algorithm for the densest subgraph problem.",
+                        "is_boolean": true,
+                        "paper_id": "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef",
+                        "comparisons": {
+                            "manual1": "",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": true,
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": "",
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d": ""
+                        }
+                    },
+                    {
+                        "criterion": "directed_and_undirected_handled",
+                        "description": "The algorithms in the paper address both directed and undirected graphs.",
+                        "is_boolean": true,
+                        "paper_id": "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef",
+                        "comparisons": {
+                            "manual1": "",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": true,
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": "",
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d": ""
+                        }
+                    },
+                    {
+                        "criterion": "large_scale_datasets_used",
+                        "description": "Experiments in the paper were conducted on large-scale datasets.",
+                        "is_boolean": true,
+                        "paper_id": "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef",
+                        "comparisons": {
+                            "manual1": "",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": true,
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": "",
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d": ""
+                        }
+                    },
+                    {
+                        "criterion": "theoretical_guarantees_provided",
+                        "description": "The algorithms in the paper come with theoretical performance guarantees.",
+                        "is_boolean": true,
+                        "paper_id": "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef",
+                        "comparisons": {
+                            "manual1": "",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": true,
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": "",
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d": ""
+                        }
+                    },
+                    {
+                        "criterion": "experimental_results_presented",
+                        "description": "The paper presents experimental results validating the algorithms.",
+                        "is_boolean": true,
+                        "paper_id": "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef",
+                        "comparisons": {
+                            "manual1": "",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": true,
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": "",
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d": ""
+                        }
+                    },
+                    {
+                        "criterion": "acknowledges_theoretical_impracticality",
+                        "description": "The paper acknowledges the impracticality of computing exact solutions for densest subgraphs in very large graphs.",
+                        "is_boolean": true,
+                        "paper_id": "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef",
+                        "comparisons": {
+                            "manual1": "",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": true,
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": "",
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d": ""
+                        }
+                    },
+                    {
+                        "criterion": "experiment_with_sketching_technique",
+                        "description": "The paper includes experiments using a sketching technique to reduce memory usage.",
+                        "is_boolean": true,
+                        "paper_id": "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef",
+                        "comparisons": {
+                            "manual1": "",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": true,
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": "",
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d": ""
+                        }
+                    },
+                    {
+                        "criterion": "uses_count_sketch",
+                        "description": "The paper utilizes the Count-Sketch data structure in its algorithmic approach.",
+                        "is_boolean": true,
+                        "paper_id": "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef",
+                        "comparisons": {
+                            "manual1": "",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": true,
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": "",
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d": ""
+                        }
+                    },
+                    {
+                        "criterion": "lower_bounds_discussed",
+                        "description": "The paper discusses lower bounds on space requirements for streaming algorithms.",
+                        "is_boolean": true,
+                        "paper_id": "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef",
+                        "comparisons": {
+                            "manual1": "",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": true,
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": "",
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d": ""
+                        }
+                    },
+                    {
+                        "criterion": "explores_dense_subgraphs_applications",
+                        "description": "The paper explores applications of the densest subgraph problem in various domains.",
+                        "is_boolean": true,
+                        "paper_id": "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef",
+                        "comparisons": {
+                            "manual1": "",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": true,
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": "",
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d": ""
+                        }
+                    },
+                    {
+                        "criterion": "provides_dataset_information",
+                        "description": "The paper provides detailed information on the datasets used for experiments.",
+                        "is_boolean": true,
+                        "paper_id": "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef",
+                        "comparisons": {
+                            "manual1": "",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": true,
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": "",
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d": ""
+                        }
+                    },
+                    {
+                        "criterion": "future_research_areas_identified",
+                        "description": "The paper identifies areas for future research based on its findings.",
+                        "is_boolean": true,
+                        "paper_id": "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef",
+                        "comparisons": {
+                            "manual1": "",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": true,
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": "",
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d": ""
+                        }
+                    },
+                    {
+                        "criterion": "uses_real_world_datasets",
+                        "description": "The paper evaluates the proposed algorithm Greedy++ on a variety of real-world datasets.",
+                        "is_boolean": true,
+                        "paper_id": "9cb4316403b1a30ae637003466336fc1347e6ddc",
+                        "comparisons": {
+                            "manual1": "",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": "",
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": true,
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d": ""
+                        }
+                    },
+                    {
+                        "criterion": "improves_on_charikar_algorithm",
+                        "description": "The paper introduces Greedy++, which is designed to improve upon Charikar's greedy algorithm for the densest subgraph problem.",
+                        "is_boolean": true,
+                        "paper_id": "9cb4316403b1a30ae637003466336fc1347e6ddc",
+                        "comparisons": {
+                            "manual1": "",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": "",
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": true,
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d": ""
+                        }
+                    },
+                    {
+                        "criterion": "provides_theoretical_guarantees",
+                        "description": "The paper provides theoretical guarantees for the approximation factor of the Greedy++ algorithm.",
+                        "is_boolean": true,
+                        "paper_id": "9cb4316403b1a30ae637003466336fc1347e6ddc",
+                        "comparisons": {
+                            "manual1": "",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": "",
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": true,
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d": ""
+                        }
+                    },
+                    {
+                        "criterion": "has_algorithmic_contributions",
+                        "description": "The paper introduces new algorithmic strategies for solving the densest subgraph problem efficiently.",
+                        "is_boolean": true,
+                        "paper_id": "9cb4316403b1a30ae637003466336fc1347e6ddc",
+                        "comparisons": {
+                            "manual1": "",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": "",
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": true,
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d": ""
+                        }
+                    },
+                    {
+                        "criterion": "includes_experimental_analysis",
+                        "description": "The paper performs experimental analysis to compare the performance of Greedy++ with existing algorithms.",
+                        "is_boolean": true,
+                        "paper_id": "9cb4316403b1a30ae637003466336fc1347e6ddc",
+                        "comparisons": {
+                            "manual1": "",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": "",
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": true,
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d": ""
+                        }
+                    },
+                    {
+                        "criterion": "addresses_np_hard_problems",
+                        "description": "The paper discusses NP-hard aspects of certain variations of the densest subgraph problem.",
+                        "is_boolean": true,
+                        "paper_id": "9cb4316403b1a30ae637003466336fc1347e6ddc",
+                        "comparisons": {
+                            "manual1": "",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": "",
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": true,
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d": ""
+                        }
+                    },
+                    {
+                        "criterion": "explores_dual_lp_formulation",
+                        "description": "The paper explores the dual linear programming formulation for the densest subgraph problem and uses it in their algorithmic approach.",
+                        "is_boolean": true,
+                        "paper_id": "9cb4316403b1a30ae637003466336fc1347e6ddc",
+                        "comparisons": {
+                            "manual1": "",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": "",
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": true,
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d": ""
+                        }
+                    },
+                    {
+                        "criterion": "applies_multiplicative_weights_update",
+                        "description": "The proposed method employs the multiplicative weights update framework as part of its algorithmic strategy.",
+                        "is_boolean": true,
+                        "paper_id": "9cb4316403b1a30ae637003466336fc1347e6ddc",
+                        "comparisons": {
+                            "manual1": "",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": "",
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": true,
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d": ""
+                        }
+                    },
+                    {
+                        "criterion": "compares_with_maximum_flow",
+                        "description": "The paper compares the Greedy++ algorithm with exact algorithms using maximum flow for solving the DSP.",
+                        "is_boolean": true,
+                        "paper_id": "9cb4316403b1a30ae637003466336fc1347e6ddc",
+                        "comparisons": {
+                            "manual1": "",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": "",
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": true,
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d": ""
+                        }
+                    },
+                    {
+                        "criterion": "provides_complexity_analysis",
+                        "description": "The paper analyzes the time complexity of the proposed Greedy++ algorithm in detail.",
+                        "is_boolean": true,
+                        "paper_id": "9cb4316403b1a30ae637003466336fc1347e6ddc",
+                        "comparisons": {
+                            "manual1": "",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": "",
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": true,
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d": ""
+                        }
+                    },
+                    {
+                        "criterion": "paper_expandable_for_large_scale_data",
+                        "description": "The paper provides insights into scaling the algorithm for large-scale data mining tasks.",
+                        "is_boolean": true,
+                        "paper_id": "9cb4316403b1a30ae637003466336fc1347e6ddc",
+                        "comparisons": {
+                            "manual1": "",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": "",
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": true,
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d": ""
+                        }
+                    },
+                    {
+                        "criterion": "includes_pseudocode",
+                        "description": "The paper provides pseudocode for the proposed Greedy++ algorithm.",
+                        "is_boolean": true,
+                        "paper_id": "9cb4316403b1a30ae637003466336fc1347e6ddc",
+                        "comparisons": {
+                            "manual1": "",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": "",
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": true,
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d": ""
+                        }
+                    },
+                    {
+                        "criterion": "multifaceted_performance_verification",
+                        "description": "The performance of Greedy++ is verified through various lenses including accuracy, speedup, and convergence behavior.",
+                        "is_boolean": true,
+                        "paper_id": "9cb4316403b1a30ae637003466336fc1347e6ddc",
+                        "comparisons": {
+                            "manual1": "",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": "",
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": true,
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d": ""
+                        }
+                    },
+                    {
+                        "criterion": "utilizes_overlap_tree",
+                        "description": "The paper introduces and employs the Overlap Tree data structure for caching in metapath query workloads.",
+                        "is_boolean": true,
+                        "paper_id": "3ad88b425fd26a6475250bbafd525b12f17f960d",
+                        "comparisons": {
+                            "manual1": "",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": "",
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": "",
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d": true
+                        }
+                    },
+                    {
+                        "criterion": "focuses_on_HINs",
+                        "description": "The research focuses on metapath query evaluations within Heterogeneous Information Networks (HINs).",
+                        "is_boolean": true,
+                        "paper_id": "3ad88b425fd26a6475250bbafd525b12f17f960d",
+                        "comparisons": {
+                            "manual1": "",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": "",
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": "",
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d": true
+                        }
+                    },
+                    {
+                        "criterion": "compares_with_existing_methods",
+                        "description": "The paper benchmarks the proposed Atrapos method against other common methods such as LRU and PGDS.",
+                        "is_boolean": true,
+                        "paper_id": "3ad88b425fd26a6475250bbafd525b12f17f960d",
+                        "comparisons": {
+                            "manual1": "",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": "",
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": "",
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d": true
+                        }
+                    },
+                    {
+                        "criterion": "introduces_caching_mechanism",
+                        "description": "Atrapos uses a customized caching mechanism to optimize the evaluation of metapath queries.",
+                        "is_boolean": true,
+                        "paper_id": "3ad88b425fd26a6475250bbafd525b12f17f960d",
+                        "comparisons": {
+                            "manual1": "",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": "",
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": "",
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d": true
+                        }
+                    },
+                    {
+                        "criterion": "improves_metapath_computation",
+                        "description": "The paper accelerates metapath computations using sparse matrix multiplication algorithms.",
+                        "is_boolean": true,
+                        "paper_id": "3ad88b425fd26a6475250bbafd525b12f17f960d",
+                        "comparisons": {
+                            "manual1": "",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": "",
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": "",
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d": true
+                        }
+                    },
+                    {
+                        "criterion": "employs_dynamic_programming",
+                        "description": "Atrapos uses dynamic programming to find efficient orders of matrix multiplications.",
+                        "is_boolean": true,
+                        "paper_id": "3ad88b425fd26a6475250bbafd525b12f17f960d",
+                        "comparisons": {
+                            "manual1": "",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": "",
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": "",
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d": true
+                        }
+                    },
+                    {
+                        "criterion": "evaluates_zipfian_distributions",
+                        "description": "The evaluation of cache replacement policies in the paper considers Zipfian query workloads.",
+                        "is_boolean": true,
+                        "paper_id": "3ad88b425fd26a6475250bbafd525b12f17f960d",
+                        "comparisons": {
+                            "manual1": "",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": "",
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": "",
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d": true
+                        }
+                    },
+                    {
+                        "criterion": "experimental_evaluation",
+                        "description": "The paper includes a thorough experimental evaluation on real-world HIN datasets.",
+                        "is_boolean": true,
+                        "paper_id": "3ad88b425fd26a6475250bbafd525b12f17f960d",
+                        "comparisons": {
+                            "manual1": "",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": "",
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": "",
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d": true
+                        }
+                    },
+                    {
+                        "criterion": "considers_constraint_queries",
+                        "description": "The Overlap Tree structure accounts for query constraints in its design.",
+                        "is_boolean": true,
+                        "paper_id": "3ad88b425fd26a6475250bbafd525b12f17f960d",
+                        "comparisons": {
+                            "manual1": "",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": "",
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": "",
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d": true
+                        }
+                    },
+                    {
+                        "criterion": "uses_knowledge_graph",
+                        "description": "The paper applies its methodology within the context of semantic knowledge graphs.",
+                        "is_boolean": true,
+                        "paper_id": "3ad88b425fd26a6475250bbafd525b12f17f960d",
+                        "comparisons": {
+                            "manual1": "",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": "",
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": "",
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d": true
+                        }
+                    },
+                    {
+                        "criterion": "evaluates_in_HIN",
+                        "description": "The methodology is applied to domains utilizing heterogeneous information networks.",
+                        "is_boolean": true,
+                        "paper_id": "3ad88b425fd26a6475250bbafd525b12f17f960d",
+                        "comparisons": {
+                            "manual1": "",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": "",
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": "",
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d": true
+                        }
+                    },
+                    {
+                        "criterion": "utilizes_overlap_tree",
+                        "description": "The methodology involves the use of the Overlap Tree to manage overlaps in queries.",
+                        "is_boolean": true,
+                        "paper_id": "3ad88b425fd26a6475250bbafd525b12f17f960d",
+                        "comparisons": {
+                            "manual1": "",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": "",
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": "",
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d": true
+                        }
+                    },
+                    {
+                        "criterion": "caches_metapath_queries",
+                        "description": "The paper's methodology caches intermediate results from metapath queries.",
+                        "is_boolean": true,
+                        "paper_id": "3ad88b425fd26a6475250bbafd525b12f17f960d",
+                        "comparisons": {
+                            "manual1": "",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": "",
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": "",
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d": true
+                        }
+                    }
+                ]
+            },
+            {
+                "step": "merged",
+                "version": "delta",
+                "content": {
+                    "created": [
+                        {
+                            "criterion": "employs_sketching_techniques"
+                        },
+                        {
+                            "criterion": "discusses_materialization_costs"
+                        },
+                        {
+                            "criterion": "identifies_technical_contributions"
+                        },
+                        {
+                            "criterion": "presents_experimental_results"
+                        },
+                        {
+                            "criterion": "uses_overlapping_tree_structure"
+                        },
+                        {
+                            "criterion": "explores_applications_of_dense_subgraphs"
+                        },
+                        {
+                            "criterion": "examines_parameter_sensitivity"
+                        },
+                        {
+                            "criterion": "discusses_space_lower_bounds"
+                        },
+                        {
+                            "criterion": "comparative_evaluation_provided"
+                        },
+                        {
+                            "criterion": "has_approximation_guarantees"
+                        },
+                        {
+                            "criterion": "demonstrates_real_world_applications"
+                        },
+                        {
+                            "criterion": "improves_on_existing_algorithms"
+                        },
+                        {
+                            "criterion": "relies_on_streaming_model"
+                        },
+                        {
+                            "criterion": "includes_complexity_analysis"
+                        },
+                        {
+                            "criterion": "mapreduce_model_implemented"
+                        },
+                        {
+                            "criterion": "supports_both_directed_and_undirected_graphs"
+                        },
+                        {
+                            "criterion": "reports_precision_metrics"
+                        },
+                        {
+                            "criterion": "supports_meta_path_usage"
+                        }
+                    ],
+                    "removed": [
+                        {
+                            "criterion": "experimental_results_presented"
+                        },
+                        {
+                            "criterion": "meta_path_support"
+                        },
+                        {
+                            "criterion": "lower_bounds_discussed"
+                        },
+                        {
+                            "criterion": "relational_graph_materialization_costs"
+                        },
+                        {
+                            "criterion": "comparative_evaluation"
+                        },
+                        {
+                            "criterion": "streaming_model_used"
+                        },
+                        {
+                            "criterion": "evaluates_zipfian_distributions"
+                        },
+                        {
+                            "criterion": "evaluates_in_HIN"
+                        },
+                        {
+                            "criterion": "explores_dense_subgraphs_applications"
+                        },
+                        {
+                            "criterion": "includes_experimental_analysis"
+                        },
+                        {
+                            "criterion": "technical_contributions"
+                        },
+                        {
+                            "criterion": "provides_approximation_guarantees"
+                        },
+                        {
+                            "criterion": "applies_to_heterogeneous_data"
+                        },
+                        {
+                            "criterion": "introduces_caching_mechanism"
+                        },
+                        {
+                            "criterion": "uses_count_sketch"
+                        },
+                        {
+                            "criterion": "provides_theoretical_guarantees"
+                        },
+                        {
+                            "criterion": "large_scale_datasets_used"
+                        },
+                        {
+                            "criterion": "result_precision_reported"
+                        },
+                        {
+                            "criterion": "caches_metapath_queries"
+                        },
+                        {
+                            "criterion": "employs_dynamic_programming"
+                        },
+                        {
+                            "criterion": "theoretical_guarantees_provided"
+                        },
+                        {
+                            "criterion": "compares_with_maximum_flow"
+                        },
+                        {
+                            "criterion": "utilizes_overlap_tree"
+                        },
+                        {
+                            "criterion": "explores_dual_lp_formulation"
+                        },
+                        {
+                            "criterion": "directed_and_undirected_handled"
+                        },
+                        {
+                            "criterion": "future_research_areas_identified"
+                        },
+                        {
+                            "criterion": "provides_complexity_analysis"
+                        },
+                        {
+                            "criterion": "considers_constraint_queries"
+                        },
+                        {
+                            "criterion": "mapreduce_model_used"
+                        },
+                        {
+                            "criterion": "unbiased_estimators_for_delta_density"
+                        },
+                        {
+                            "criterion": "complexity_analysis"
+                        },
+                        {
+                            "criterion": "improves_metapath_computation"
+                        },
+                        {
+                            "criterion": "includes_pseudocode"
+                        },
+                        {
+                            "criterion": "applies_multiplicative_weights_update"
+                        },
+                        {
+                            "criterion": "uses_real_world_datasets"
+                        },
+                        {
+                            "criterion": "uses_knowledge_graph"
+                        },
+                        {
+                            "criterion": "compares_with_existing_methods"
+                        },
+                        {
+                            "criterion": "paper_expandable_for_large_scale_data"
+                        },
+                        {
+                            "criterion": "parameter_sensitivity"
+                        },
+                        {
+                            "criterion": "experimental_evaluation"
+                        },
+                        {
+                            "criterion": "experiment_with_sketching_technique"
+                        },
+                        {
+                            "criterion": "real_world_applications"
+                        },
+                        {
+                            "criterion": "multifaceted_performance_verification"
+                        },
+                        {
+                            "criterion": "improves_on_charikar_algorithm"
+                        },
+                        {
+                            "criterion": "provides_probabilistic_bounds"
+                        }
+                    ]
+                },
+                "full_snapshot": [
+                    {
+                        "criterion": "uses_summary_based_peeling",
+                        "description": "The paper proposes the use of summary-based peeling for densest subgraph discovery.",
+                        "papers": [
+                            "manual1"
+                        ],
+                        "is_boolean": true
+                    },
+                    {
+                        "criterion": "materialization_free",
+                        "description": "The proposed method avoids explicit materialization of relational graphs.",
+                        "papers": [
+                            "manual1"
+                        ],
+                        "is_boolean": true
+                    },
+                    {
+                        "criterion": "has_approximation_guarantees",
+                        "description": "The paper provides theoretical approximation guarantees for the methods proposed.",
+                        "papers": [
+                            "manual1",
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc"
+                        ],
+                        "is_boolean": true
+                    },
+                    {
+                        "criterion": "handles_large_datasets",
+                        "description": "The method is tested on large datasets and demonstrates scalability.",
+                        "papers": [
+                            "manual1",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef"
+                        ],
+                        "is_boolean": true
+                    },
+                    {
+                        "criterion": "includes_complexity_analysis",
+                        "description": "The paper includes a detailed complexity analysis of the proposed method.",
+                        "papers": [
+                            "manual1",
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc"
+                        ],
+                        "is_boolean": true
+                    },
+                    {
+                        "criterion": "supports_multiple_density_metrics",
+                        "description": "The system can support multiple types of density metrics including edge and triangle density.",
+                        "papers": [
+                            "manual1"
+                        ],
+                        "is_boolean": true
+                    },
+                    {
+                        "criterion": "demonstrates_real_world_applications",
+                        "description": "The paper demonstrates the effectiveness of the method on real-world applications.",
+                        "papers": [
+                            "manual1",
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc"
+                        ],
+                        "is_boolean": true
+                    },
+                    {
+                        "criterion": "comparative_evaluation_provided",
+                        "description": "The paper includes a comparative evaluation against baseline methods.",
+                        "papers": [
+                            "manual1",
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d"
+                        ],
+                        "is_boolean": true
+                    },
+                    {
+                        "criterion": "examines_parameter_sensitivity",
+                        "description": "The paper examines the sensitivity of its results to different parameter settings.",
+                        "papers": [
+                            "manual1"
+                        ],
+                        "is_boolean": true
+                    },
+                    {
+                        "criterion": "discusses_materialization_costs",
+                        "description": "The paper discusses the costs associated with materializing relational graphs.",
+                        "papers": [
+                            "manual1"
+                        ],
+                        "is_boolean": true
+                    },
+                    {
+                        "criterion": "reports_precision_metrics",
+                        "description": "The paper reports precision metrics for its results in related scenarios.",
+                        "papers": [
+                            "manual1"
+                        ],
+                        "is_boolean": true
+                    },
+                    {
+                        "criterion": "supports_meta_path_usage",
+                        "description": "The proposed system supports the use of meta-paths for the extraction of relational graphs.",
+                        "papers": [
+                            "manual1"
+                        ],
+                        "is_boolean": true
+                    },
+                    {
+                        "criterion": "identifies_technical_contributions",
+                        "description": "The paper outlines specific technical contributions that differentiate it from prior studies.",
+                        "papers": [
+                            "manual1"
+                        ],
+                        "is_boolean": true
+                    },
+                    {
+                        "criterion": "relies_on_streaming_model",
+                        "description": "The paper utilizes the streaming model for algorithm development.",
+                        "papers": [
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef"
+                        ],
+                        "is_boolean": true
+                    },
+                    {
+                        "criterion": "mapreduce_model_implemented",
+                        "description": "The paper implements its algorithms using the MapReduce model.",
+                        "papers": [
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef"
+                        ],
+                        "is_boolean": true
+                    },
+                    {
+                        "criterion": "constant_factor_approximation",
+                        "description": "The paper provides a constant-factor approximation algorithm.",
+                        "papers": [
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef"
+                        ],
+                        "is_boolean": true
+                    },
+                    {
+                        "criterion": "supports_both_directed_and_undirected_graphs",
+                        "description": "The algorithms in the paper address both directed and undirected graphs.",
+                        "papers": [
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef"
+                        ],
+                        "is_boolean": true
+                    },
+                    {
+                        "criterion": "presents_experimental_results",
+                        "description": "The paper presents experimental results validating the algorithms.",
+                        "papers": [
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef",
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc",
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d"
+                        ],
+                        "is_boolean": true
+                    },
+                    {
+                        "criterion": "acknowledges_theoretical_impracticality",
+                        "description": "The paper acknowledges the impracticality of computing exact solutions for very large problems.",
+                        "papers": [
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef"
+                        ],
+                        "is_boolean": true
+                    },
+                    {
+                        "criterion": "employs_sketching_techniques",
+                        "description": "The paper includes experiments using a sketching technique to reduce memory usage.",
+                        "papers": [
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef"
+                        ],
+                        "is_boolean": true
+                    },
+                    {
+                        "criterion": "discusses_space_lower_bounds",
+                        "description": "The paper discusses lower bounds on the space requirements for streaming algorithms.",
+                        "papers": [
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef"
+                        ],
+                        "is_boolean": true
+                    },
+                    {
+                        "criterion": "explores_applications_of_dense_subgraphs",
+                        "description": "The paper explores applications of the densest subgraph problem in various domains.",
+                        "papers": [
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef"
+                        ],
+                        "is_boolean": true
+                    },
+                    {
+                        "criterion": "provides_dataset_information",
+                        "description": "The paper provides detailed information on the datasets used for experiments.",
+                        "papers": [
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef"
+                        ],
+                        "is_boolean": true
+                    },
+                    {
+                        "criterion": "improves_on_existing_algorithms",
+                        "description": "The paper introduces methods that improve upon existing algorithms.",
+                        "papers": [
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc"
+                        ],
+                        "is_boolean": true
+                    },
+                    {
+                        "criterion": "has_algorithmic_contributions",
+                        "description": "The paper introduces new algorithmic strategies.",
+                        "papers": [
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc"
+                        ],
+                        "is_boolean": true
+                    },
+                    {
+                        "criterion": "addresses_np_hard_problems",
+                        "description": "The paper discusses NP-hard aspects of certain problem variations.",
+                        "papers": [
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc"
+                        ],
+                        "is_boolean": true
+                    },
+                    {
+                        "criterion": "uses_overlapping_tree_structure",
+                        "description": "The paper utilizes an overlapping tree structure for caching.",
+                        "papers": [
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d"
+                        ],
+                        "is_boolean": true
+                    },
+                    {
+                        "criterion": "focuses_on_HINs",
+                        "description": "The research focuses on metapath query evaluations within Heterogeneous Information Networks.",
+                        "papers": [
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d"
+                        ],
+                        "is_boolean": true
+                    }
+                ]
+            },
+            {
+                "step": "refined",
+                "version": "delta",
+                "content": {
+                    "created": [],
+                    "removed": [
+                        {
+                            "criterion": "examines_parameter_sensitivity"
+                        },
+                        {
+                            "criterion": "reports_precision_metrics"
+                        }
+                    ]
+                },
+                "full_snapshot": [
+                    {
+                        "criterion": "uses_summary_based_peeling",
+                        "description": "The paper proposes the use of summary-based peeling for densest subgraph discovery.",
+                        "papers": [
+                            "manual1"
+                        ]
+                    },
+                    {
+                        "criterion": "materialization_free",
+                        "description": "The proposed method avoids explicit materialization of relational graphs.",
+                        "papers": [
+                            "manual1"
+                        ]
+                    },
+                    {
+                        "criterion": "has_approximation_guarantees",
+                        "description": "The paper provides theoretical approximation guarantees for the methods proposed.",
+                        "papers": [
+                            "manual1",
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc"
+                        ]
+                    },
+                    {
+                        "criterion": "handles_large_datasets",
+                        "description": "The method is tested on large datasets and demonstrates scalability.",
+                        "papers": [
+                            "manual1",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef"
+                        ]
+                    },
+                    {
+                        "criterion": "includes_complexity_analysis",
+                        "description": "The paper includes a detailed complexity analysis of the proposed method.",
+                        "papers": [
+                            "manual1",
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc"
+                        ]
+                    },
+                    {
+                        "criterion": "supports_multiple_density_metrics",
+                        "description": "The system can support multiple types of density metrics including edge and triangle density.",
+                        "papers": [
+                            "manual1"
+                        ]
+                    },
+                    {
+                        "criterion": "demonstrates_real_world_applications",
+                        "description": "The paper demonstrates the effectiveness of the method on real-world applications.",
+                        "papers": [
+                            "manual1",
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc"
+                        ]
+                    },
+                    {
+                        "criterion": "comparative_evaluation_provided",
+                        "description": "The paper includes a comparative evaluation against baseline methods.",
+                        "papers": [
+                            "manual1",
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d"
+                        ]
+                    },
+                    {
+                        "criterion": "discusses_materialization_costs",
+                        "description": "The paper discusses the costs associated with materializing relational graphs.",
+                        "papers": [
+                            "manual1"
+                        ]
+                    },
+                    {
+                        "criterion": "supports_meta_path_usage",
+                        "description": "The proposed system supports the use of meta-paths for the extraction of relational graphs.",
+                        "papers": [
+                            "manual1"
+                        ]
+                    },
+                    {
+                        "criterion": "identifies_technical_contributions",
+                        "description": "The paper outlines specific technical contributions that differentiate it from prior studies.",
+                        "papers": [
+                            "manual1"
+                        ]
+                    },
+                    {
+                        "criterion": "relies_on_streaming_model",
+                        "description": "The paper utilizes the streaming model for algorithm development.",
+                        "papers": [
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef"
+                        ]
+                    },
+                    {
+                        "criterion": "mapreduce_model_implemented",
+                        "description": "The paper implements its algorithms using the MapReduce model.",
+                        "papers": [
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef"
+                        ]
+                    },
+                    {
+                        "criterion": "constant_factor_approximation",
+                        "description": "The paper provides a constant-factor approximation algorithm.",
+                        "papers": [
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef"
+                        ]
+                    },
+                    {
+                        "criterion": "supports_both_directed_and_undirected_graphs",
+                        "description": "The algorithms in the paper address both directed and undirected graphs.",
+                        "papers": [
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef"
+                        ]
+                    },
+                    {
+                        "criterion": "presents_experimental_results",
+                        "description": "The paper presents experimental results validating the algorithms.",
+                        "papers": [
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef",
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc",
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d"
+                        ]
+                    },
+                    {
+                        "criterion": "acknowledges_theoretical_impracticality",
+                        "description": "The paper acknowledges the impracticality of computing exact solutions for very large problems.",
+                        "papers": [
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef"
+                        ]
+                    },
+                    {
+                        "criterion": "employs_sketching_techniques",
+                        "description": "The paper includes experiments using a sketching technique to reduce memory usage.",
+                        "papers": [
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef"
+                        ]
+                    },
+                    {
+                        "criterion": "discusses_space_lower_bounds",
+                        "description": "The paper discusses lower bounds on the space requirements for streaming algorithms.",
+                        "papers": [
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef"
+                        ]
+                    },
+                    {
+                        "criterion": "explores_applications_of_dense_subgraphs",
+                        "description": "The paper explores applications of the densest subgraph problem in various domains.",
+                        "papers": [
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef"
+                        ]
+                    },
+                    {
+                        "criterion": "provides_dataset_information",
+                        "description": "The paper provides detailed information on the datasets used for experiments.",
+                        "papers": [
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef"
+                        ]
+                    },
+                    {
+                        "criterion": "improves_on_existing_algorithms",
+                        "description": "The paper introduces methods that improve upon existing algorithms.",
+                        "papers": [
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc"
+                        ]
+                    },
+                    {
+                        "criterion": "has_algorithmic_contributions",
+                        "description": "The paper introduces new algorithmic strategies.",
+                        "papers": [
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc"
+                        ]
+                    },
+                    {
+                        "criterion": "addresses_np_hard_problems",
+                        "description": "The paper discusses NP-hard aspects of certain problem variations.",
+                        "papers": [
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc"
+                        ]
+                    },
+                    {
+                        "criterion": "uses_overlapping_tree_structure",
+                        "description": "The paper utilizes an overlapping tree structure for caching.",
+                        "papers": [
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d"
+                        ]
+                    },
+                    {
+                        "criterion": "focuses_on_HINs",
+                        "description": "The research focuses on metapath query evaluations within Heterogeneous Information Networks.",
+                        "papers": [
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d"
+                        ]
+                    }
+                ]
+            },
+            {
+                "step": "final",
+                "version": "delta",
+                "content": {
+                    "created": [],
+                    "removed": []
+                },
+                "full_snapshot": [
+                    {
+                        "criterion": "uses_summary_based_peeling",
+                        "description": "The paper proposes the use of summary-based peeling for densest subgraph discovery.",
+                        "comparisons": {
+                            "manual1": true,
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": false,
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": false,
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d": false
+                        }
+                    },
+                    {
+                        "criterion": "materialization_free",
+                        "description": "The proposed method avoids explicit materialization of relational graphs.",
+                        "comparisons": {
+                            "manual1": true,
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": false,
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": "N/A",
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d": false
+                        }
+                    },
+                    {
+                        "criterion": "has_approximation_guarantees",
+                        "description": "The paper provides theoretical approximation guarantees for the methods proposed.",
+                        "comparisons": {
+                            "manual1": true,
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": true,
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": true,
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d": "N/A"
+                        }
+                    },
+                    {
+                        "criterion": "handles_large_datasets",
+                        "description": "The method is tested on large datasets and demonstrates scalability.",
+                        "comparisons": {
+                            "manual1": true,
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": true,
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": true,
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d": false
+                        }
+                    },
+                    {
+                        "criterion": "includes_complexity_analysis",
+                        "description": "The paper includes a detailed complexity analysis of the proposed method.",
+                        "comparisons": {
+                            "manual1": true,
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": false,
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": false,
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d": false
+                        }
+                    },
+                    {
+                        "criterion": "supports_multiple_density_metrics",
+                        "description": "The system can support multiple types of density metrics including edge and triangle density.",
+                        "comparisons": {
+                            "manual1": true,
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": false,
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": false,
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d": "N/A"
+                        }
+                    },
+                    {
+                        "criterion": "demonstrates_real_world_applications",
+                        "description": "The paper demonstrates the effectiveness of the method on real-world applications.",
+                        "comparisons": {
+                            "manual1": true,
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": false,
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": true,
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d": false
+                        }
+                    },
+                    {
+                        "criterion": "comparative_evaluation_provided",
+                        "description": "The paper includes a comparative evaluation against baseline methods.",
+                        "comparisons": {
+                            "manual1": true,
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": false,
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": true,
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d": false
+                        }
+                    },
+                    {
+                        "criterion": "discusses_materialization_costs",
+                        "description": "The paper discusses the costs associated with materializing relational graphs.",
+                        "comparisons": {
+                            "manual1": true,
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": false,
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": false,
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d": false
+                        }
+                    },
+                    {
+                        "criterion": "supports_meta_path_usage",
+                        "description": "The proposed system supports the use of meta-paths for the extraction of relational graphs.",
+                        "comparisons": {
+                            "manual1": true,
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": false,
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": false,
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d": true
+                        }
+                    },
+                    {
+                        "criterion": "identifies_technical_contributions",
+                        "description": "The paper outlines specific technical contributions that differentiate it from prior studies.",
+                        "comparisons": {
+                            "manual1": true,
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": false,
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": false,
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d": true
+                        }
+                    },
+                    {
+                        "criterion": "relies_on_streaming_model",
+                        "description": "The paper utilizes the streaming model for algorithm development.",
+                        "comparisons": {
+                            "manual1": "N/A",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": true,
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": false,
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d": false
+                        }
+                    },
+                    {
+                        "criterion": "mapreduce_model_implemented",
+                        "description": "The paper implements its algorithms using the MapReduce model.",
+                        "comparisons": {
+                            "manual1": "N/A",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": true,
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": false,
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d": false
+                        }
+                    },
+                    {
+                        "criterion": "constant_factor_approximation",
+                        "description": "The paper provides a constant-factor approximation algorithm.",
+                        "comparisons": {
+                            "manual1": "true",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": "true",
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": "true",
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d": "N/A"
+                        }
+                    },
+                    {
+                        "criterion": "supports_both_directed_and_undirected_graphs",
+                        "description": "The algorithms in the paper address both directed and undirected graphs.",
+                        "comparisons": {
+                            "manual1": "N/A",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": true,
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": true,
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d": false
+                        }
+                    },
+                    {
+                        "criterion": "presents_experimental_results",
+                        "description": "The paper presents experimental results validating the algorithms.",
+                        "comparisons": {
+                            "manual1": true,
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": true,
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": true,
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d": true
+                        }
+                    },
+                    {
+                        "criterion": "acknowledges_theoretical_impracticality",
+                        "description": "The paper acknowledges the impracticality of computing exact solutions for very large problems.",
+                        "comparisons": {
+                            "manual1": false,
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": false,
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": true,
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d": false
+                        }
+                    },
+                    {
+                        "criterion": "employs_sketching_techniques",
+                        "description": "The paper includes experiments using a sketching technique to reduce memory usage.",
+                        "comparisons": {
+                            "manual1": false,
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": true,
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": false,
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d": false
+                        }
+                    },
+                    {
+                        "criterion": "discusses_space_lower_bounds",
+                        "description": "The paper discusses lower bounds on the space requirements for streaming algorithms.",
+                        "comparisons": {
+                            "manual1": "N/A",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": true,
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": false,
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d": false
+                        }
+                    },
+                    {
+                        "criterion": "explores_applications_of_dense_subgraphs",
+                        "description": "The paper explores applications of the densest subgraph problem in various domains.",
+                        "comparisons": {
+                            "manual1": true,
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": true,
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": true,
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d": false
+                        }
+                    },
+                    {
+                        "criterion": "provides_dataset_information",
+                        "description": "The paper provides detailed information on the datasets used for experiments.",
+                        "comparisons": {
+                            "manual1": false,
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": true,
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": true,
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d": true
+                        }
+                    },
+                    {
+                        "criterion": "improves_on_existing_algorithms",
+                        "description": "The paper introduces methods that improve upon existing algorithms.",
+                        "comparisons": {
+                            "manual1": true,
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": true,
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": true,
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d": true
+                        }
+                    },
+                    {
+                        "criterion": "has_algorithmic_contributions",
+                        "description": "The paper introduces new algorithmic strategies.",
+                        "comparisons": {
+                            "manual1": true,
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": false,
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": true,
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d": true
+                        }
+                    },
+                    {
+                        "criterion": "addresses_np_hard_problems",
+                        "description": "The paper discusses NP-hard aspects of certain problem variations.",
+                        "comparisons": {
+                            "manual1": false,
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": true,
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": true,
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d": false
+                        }
+                    },
+                    {
+                        "criterion": "uses_overlapping_tree_structure",
+                        "description": "The paper utilizes an overlapping tree structure for caching.",
+                        "comparisons": {
+                            "manual1": "N/A",
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": "N/A",
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": "N/A",
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d": true
+                        }
+                    },
+                    {
+                        "criterion": "focuses_on_HINs",
+                        "description": "The research focuses on metapath query evaluations within Heterogeneous Information Networks.",
+                        "comparisons": {
+                            "manual1": true,
+                            "fb232886e08a0a85b4dcd7e9712d0ec17dbe8aef": false,
+                            "9cb4316403b1a30ae637003466336fc1347e6ddc": false,
+                            "3ad88b425fd26a6475250bbafd525b12f17f960d": true
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+]

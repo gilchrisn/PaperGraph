@@ -611,15 +611,15 @@ def create_comparison_table(
         expansion_approach = criterion_generation_strategy.split("+")[0].strip()
         merging_approach = criterion_generation_strategy.split("+")[1].strip()
 
-        # criteria_list = create_comparison_criteria_two_passes(
-        #     repository,
-        #     paper_ids=all_paper_ids,
-        #     prompt_chatgpt=prompt_chatgpt,
-        #     expansion_approach=expansion_approach,
-        #     merging_approach=merging_approach
-        # )
+        criteria_list = create_comparison_criteria_two_passes(
+            repository,
+            paper_ids=all_paper_ids,
+            prompt_chatgpt=prompt_chatgpt,
+            expansion_approach=expansion_approach,
+            merging_approach=merging_approach
+        )
 
-        criteria_list = json.loads(DUMMY_CRITERIA1)
+        # criteria_list = json.loads(DUMMY_CRITERIA1)
 
         # from comparison_table_generation.criterion_generation import refine_criteria_second_pass
         # from services.openai_service import prompt_chatgpt
